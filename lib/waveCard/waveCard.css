@@ -1,0 +1,127 @@
+.waveCards {
+    position: relative;
+    /* padding: 0 10%; */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.waveCardImg{
+    position: absolute;
+    width: 100%;    
+    height: 100%;
+}
+.waveCardImg img{
+    position: absolute;
+    width: 200%;
+    left: -50%;
+}
+
+
+.waveCard {
+    position: relative;
+    /* padding: 50px 0; */
+    width: 18vw;
+    height: 18vw;
+    min-width: 200px;
+    min-height: 200px;
+    /* background-color: rgb(0, 0, 0); */
+    margin: 100px auto;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    
+}
+
+.page .waveCard h3{
+    position: relative;
+    font-size: 1.2em;
+    line-height: 4em;
+    
+}
+
+
+.waveCont {
+    position: relative;
+    width: 100%;
+    top: 50%;
+    /* transition: all 0.5s ease-in-out;  */
+}
+
+
+/* .waveCard:hover .waveCont{
+    top: 55%;    
+} */
+
+
+
+.infoBox {
+    position: relative;
+    text-align: center;
+    background-color: #2e54aa;
+    text-align: center;
+    min-height: 10vh;
+    color: #eee;
+    top: -18px;
+    height: 18vw;
+}
+
+.infoBox h1 {
+position: relative;
+    text-align: center;
+    font-size: 18px;
+    line-height: 36px;
+}
+
+.editorial {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    top: 0px;
+}
+
+::selection {
+    background-color: rgb(38, 38, 38);
+    color: white;
+}
+
+.parallax>use {
+    animation: move-forever 12s linear infinite;
+}
+
+.parallax>use:nth-child(1) {
+    animation-delay: -2s;
+}
+
+.parallax>use:nth-child(2) {
+    animation-delay: -2s;
+    animation-duration: 5s;
+}
+
+.parallax>use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 3s;
+}
+
+@keyframes move-forever {
+    0% {
+        transform: translate(-90px, 0%);
+    }
+    100% {
+        transform: translate(85px, 0%);
+    }
+}
+
+
+/*prevent many large-by-comparison ripples by shrinking the height*/
+
+/* @media (max-width: 50em) {
+    .infoBox h1 {
+        font-size: 12vmax;
+    }
+    .editorial {
+        height: 17vw;
+    }
+} */
+

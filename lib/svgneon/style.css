@@ -1,0 +1,71 @@
+
+
+html, body {
+
+  /* background-color: #111; */
+}
+
+.glow {
+  animation-name: glow;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes glow {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+.deer, .number {
+  stroke: #ff00ff;
+}
+
+.red {
+  stroke: #ff0000;
+}
+
+.text {
+  font-size: 50px;
+}
+
+.text-purple {
+  fill: #ff00ff;
+  stroke: #ff00ff;
+  font-size: 50px;
+}
+
+.text-green {
+  stroke: #00ff00;
+  fill: #00ff00;
+  font-size: 50px;
+}
+
+.text-blue {
+  stroke: #0000dd;
+  fill: #0000dd;
+  font-size: 50px;
+}
+
+.text-red {
+  stroke: #dd0000;
+  fill: #dd0000;
+  font-size: 50px;
+}
+
+.white {
+  opacity: .7;
+}
+
+.white2 {
+  opacity: .6;
+}
+
+.white3 {
+  opacity: .5;
+}
