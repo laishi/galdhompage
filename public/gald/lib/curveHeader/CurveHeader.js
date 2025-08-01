@@ -62,6 +62,7 @@ class CurveHeader {
 
     init() {
         this.updatePath();
+        this.lazyImg()
         this.changeHue();
         this.navFlow();
         this.navsTip();
@@ -83,6 +84,70 @@ class CurveHeader {
             logo.style.transform = `scale(${limitScale})`;
         });
     }
+
+
+
+
+lazyImg() {
+    const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)"); // 排除 jzled
+    const jzledElement = document.querySelector(".clipImg.jzled");
+
+    // 优先加载 jzled 图片
+    if (jzledElement) {
+        const src = jzledElement.getAttribute("href") || jzledElement.getAttribute("xlink:href");
+        if (src) {
+            jzledElement.setAttribute("href", src); // 确保 href 已设置
+            console.log("jzled image loaded:", src);
+        } else {
+            console.warn("jzled image missing href:", jzledElement);
+        }
+    }
+
+    if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+            (entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        // 支持 SVG image 的 href 和 xlink:href
+                        const src = el.getAttribute("hrep") || el.getAttribute("href") || el.getAttribute("xlink:href");
+                        if (src) {
+                            el.setAttribute("href", src); // SVG image 使用 href
+                            el.removeAttribute("hrep");
+                            console.log("Lazy loaded image:", src);
+                        } else {
+                            console.warn("No valid image source for:", el);
+                        }
+                        observer.unobserve(el);
+                    }
+                });
+            },
+            {
+                rootMargin: "200px",
+                threshold: 0.1,
+            }
+        );
+
+        lazyElements.forEach((el) => {
+            observer.observe(el);
+        });
+    } else {
+        // 后备方案：直接加载所有图片
+        lazyElements.forEach((el) => {
+            const src = el.getAttribute("hrep") || el.getAttribute("href") || el.getAttribute("xlink:href");
+            if (src) {
+                el.setAttribute("href", src);
+                el.removeAttribute("hrep");
+                console.log("Fallback loaded image:", src);
+            } else {
+                console.warn("No valid image source for:", el);
+            }
+        });
+    }
+}
+
+
+
 
     navToPage(pages) {
         
@@ -363,6 +428,9 @@ class CurveHeader {
         this.curveData = curveData;
         this.curveLength = this.curvePath.getTotalLength();
 
+        console.log("svg 初始化完成");
+        
+
 
         this.initfun(ww, curveHeight);
     }
@@ -371,6 +439,8 @@ class CurveHeader {
         this.setupParallaxImages(curveHeight);
         this.girlCenter(ww, curveHeight);
         this.setNavsOnPath();
+
+        console.log("加载其他资源");
     }
 
 
