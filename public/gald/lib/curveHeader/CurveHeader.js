@@ -199,6 +199,7 @@ class CurveHeader {
                 this.flowEnd = true;
                 this.logoNavExpand();
                 this.headerMask();
+                this.setupParallaxImages(this.curveHeight);
                 this.navLogo.classList.add("jelly-animate");
                 this.navLogo.addEventListener("animationend", () => {
                 this.navLogo.classList.remove("jelly-animate");
@@ -358,22 +359,32 @@ class CurveHeader {
         const shapTop = `M 0,${baseTopHeight} Q ${centerLeft},${shapTopOffset} ${ww / 2},${shapTopOffset} Q ${centerRight},${shapTopOffset} ${ww},${baseTopHeight} v ${baseOffset}`;
         const shapBottom = ` Q ${centerRight},${shapBottomOffset} ${ww / 2},${shapBottomOffset} Q ${centerLeft},${shapBottomOffset} 0,${baseBottomHeight} Z`;
         const curveOffsetData = shapTop + " " + shapBottom;
-
         this.headerShape.setAttribute("d", curveOffsetData);
         this.curveData = curveData;
         this.curveLength = this.curvePath.getTotalLength();
-        this.setupParallaxImages(curveHeight);
-        this.girlCenter(ww, curveHeight);       
 
-        this.setNavsOnPath();
 
-        if (Math.abs(curveHeight - sideHeight) > 50) {
-            this.subTitle.style.top = `${sideHeight - 50}px`;
-            this.subTitle.style.opacity = 1;
-        } else {
-            this.subTitle.style.opacity = 0;
-        }
+        this.initfun(ww, curveHeight);
     }
+
+    initfun(ww, curveHeight) {
+        this.setupParallaxImages(curveHeight);
+        this.girlCenter(ww, curveHeight);
+        this.setNavsOnPath();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
