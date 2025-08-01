@@ -465,6 +465,6 @@ class CurveHeader {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    window['CurveHeader'] = new CurveHeader('CurveHeader', true, { svgHeight: 70, isdown: true });
+    window['CurveHeader'] = new CurveHeader('CurveHeader', true, { svgHeight: 80, isdown: true });
 });
 
