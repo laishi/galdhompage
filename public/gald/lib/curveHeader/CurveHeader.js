@@ -87,20 +87,19 @@ class CurveHeader {
 
 
 
-
     lazyImg() {
-        const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)"); // 排除 jzled
+        const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
         const jzledElement = document.querySelector(".clipImg.jzled");
 
         // 优先加载 jzled 图片
         if (jzledElement) {
-            const src = jzledElement.getAttribute("href") || jzledElement.getAttribute("xlink:href");
+            const src = jzledElement.getAttribute("data-href");
             if (src) {
-                jzledElement.setAttribute("href", src); // 确保 href 已设置
+                jzledElement.setAttribute("href", src);
                 console.log("jzled image loaded:", src);
                 this.headerMask();
             } else {
-                console.warn("jzled image missing href:", jzledElement);
+                console.warn("jzled image missing data-href:", jzledElement);
             }
         }
 
@@ -110,11 +109,9 @@ class CurveHeader {
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
                             const el = entry.target;
-                            // 支持 SVG image 的 href 和 xlink:href
-                            const src = el.getAttribute("hrep") || el.getAttribute("href") || el.getAttribute("xlink:href");
+                            const src = el.getAttribute("data-href");
                             if (src) {
-                                el.setAttribute("href", src); // SVG image 使用 href
-                                el.removeAttribute("hrep");
+                                el.setAttribute("href", src);
                                 console.log("Lazy loaded image:", src);
                             } else {
                                 console.warn("No valid image source for:", el);
@@ -135,10 +132,9 @@ class CurveHeader {
         } else {
             // 后备方案：直接加载所有图片
             lazyElements.forEach((el) => {
-                const src = el.getAttribute("hrep") || el.getAttribute("href") || el.getAttribute("xlink:href");
+                const src = el.getAttribute("data-href");
                 if (src) {
                     el.setAttribute("href", src);
-                    el.removeAttribute("hrep");
                     console.log("Fallback loaded image:", src);
                 } else {
                     console.warn("No valid image source for:", el);
