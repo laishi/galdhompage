@@ -103,7 +103,7 @@
 }
 
 .card:hover {
-  border: 1px solid var(--menu-bg-lighter);
+  border: 2px solid var(--menu-bg-lighter);
 }
 
 .card:hover .cardImg {
@@ -146,13 +146,21 @@
   height: 3em;
   margin: 0 3px;
   border-radius: 100%;
-  border: 1px solid white;
+  /* border: 1px solid rgba(255, 255, 255, 0.753); */
   overflow: hidden;
   transition: transform 0.3s, opacity 0.5s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.girdImgs .imgDots .imgDot img{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .imgDot:hover {
-  border: 1px solid var(--menu-bg-lighter);
+  border: 2px solid var(--menu-bg-lighter);
   transform: scale(1.2);
 }
 

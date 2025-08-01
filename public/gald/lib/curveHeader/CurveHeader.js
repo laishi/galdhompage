@@ -65,7 +65,10 @@ class CurveHeader {
         this.navFlow();
         this.navsTip();
         this.navToPage(this.pages);
-        window.addEventListener('resize', () => this.updatePath());
+        window.addEventListener('resize', () => {
+            this.updatePath();
+            this.setupParallaxImages(this.curveHeight);
+        });
         window.addEventListener('scroll', () => {
             this.scrollY = window.scrollY || document.documentElement.scrollTop;
             this.updatePath(this.scrollY);
@@ -81,13 +84,14 @@ class CurveHeader {
     }
 
     navToPage(pages) {
+        
         this.navs.forEach((nav, index) => {
             nav.addEventListener("click", () => {
                 pages.forEach((page) => {
                     page.classList.remove("pagedown");
                 });
+                const pageHeight = pages[index].offsetHeight;
                 pages[index].classList.add("pagedown");
-                const oh = pages[index].offsetHeight;
             });
         });
 
@@ -109,68 +113,68 @@ class CurveHeader {
         }, 5000);
     }
 
-setupParallaxImages(curveHeight) {
-    const clipImages = document.querySelectorAll(".clipImg");
-    const dancer = document.querySelectorAll(".dancer");
-    const rains = document.querySelectorAll(".rain");
-    const jzled = document.querySelector(".jzled");
-    const ww = window.innerWidth;
-    const wh = window.innerHeight;
+    setupParallaxImages(curveHeight) {
+        const clipImages = document.querySelectorAll(".clipImg");
+        const dancer = document.querySelectorAll(".dancer");
+        const rains = document.querySelectorAll(".rain");
+        const jzled = document.querySelector(".jzled");
+        const ww = window.innerWidth;
+        const wh = window.innerHeight;
 
-    // 设置 jzled 位置
-    jzled.style.transition = "";
-    jzled.setAttribute("x", (ww - 1225) / 2);
-    jzled.setAttribute("y", curveHeight / 5);
+        // 设置 jzled 位置
+        jzled.style.transition = "";
+        jzled.setAttribute("x", (ww - 1225) / 2);
+        jzled.setAttribute("y", curveHeight / 5);
 
-    // 初始化 imageStates 用于视差效果
-    const imageStates = Array.from(clipImages).map((ele, index) => {
-        const x = parseFloat(ele.getAttribute("x")) || 0;
-        const y = parseFloat(ele.getAttribute("y")) || 0;
-        return {
-            ele,
-            sourceX: x,
-            sourceY: y,
-            scale: 0.01 * index
-        };
-    });
-
-    // 设置 dancer 位置
-    dancer.forEach((item, index) => {
-        // 获取 SVG 初始 x 和 y
-        const initialX = parseFloat(item.getAttribute("x")) || 0;
-        const initialY = parseFloat(item.getAttribute("y")) || 0;
-
-        // 计算随机位置，基于窗口中心点
-        const minX = ww * 0.2;
-        const maxX = ww - minX;
-        const randomX = minX + Math.random() * (maxX - minX) + initialX; // 结合初始 x
-
-        const minY = curveHeight - (dancer.length - index) * 300;
-        const maxY = curveHeight / 5 + 527 * 0.6;
-        const yPos = Math.max(minY, maxY) + initialY; // 结合初始 y
-
-        // 应用 transform 确保位置在屏幕内
-        item.style.transform = `translate(${randomX}px, ${yPos}px)`;
-        item.style.opacity = 1;
-    });
-
-    // 视差效果
-    window.addEventListener("mousemove", function(e) {
-        const offsetX = e.clientX - ww / 2;
-        const offsetY = e.clientY - wh / 2;
-        imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
-            const xpos = offsetX * scale;
-            const ypos = offsetY * scale * 0.01;
-            ele.setAttribute("x", sourceX + xpos);
-            ele.setAttribute("y", sourceY + ypos);
+        // 初始化 imageStates 用于视差效果
+        const imageStates = Array.from(clipImages).map((ele, index) => {
+            const x = parseFloat(ele.getAttribute("x")) || 0;
+            const y = parseFloat(ele.getAttribute("y")) || 0;
+            return {
+                ele,
+                sourceX: x,
+                sourceY: y,
+                scale: 0.01 * index
+            };
         });
-    });
 
-    // 冷却时间逻辑
-    const now = Date.now();
-    if (now - this.lastSetupTime < this.cooldown) return;
-    this.lastSetupTime = now;
-}
+        // 设置 dancer 位置
+        dancer.forEach((item, index) => {
+            // 获取 SVG 初始 x 和 y
+            const initialX = parseFloat(item.getAttribute("x")) || 0;
+            const initialY = parseFloat(item.getAttribute("y")) || 0;
+
+            // 计算随机位置，基于窗口中心点
+            const minX = ww * 0.2;
+            const maxX = ww - minX;
+            const randomX = minX + Math.random() * (maxX - minX) + initialX; // 结合初始 x
+
+            const minY = curveHeight - (dancer.length - index) * 300;
+            const maxY = curveHeight / 5 + 527 * 0.6;
+            const yPos = Math.max(minY, maxY) + initialY; // 结合初始 y
+
+            // 应用 transform 确保位置在屏幕内
+            item.style.transform = `translate(${randomX}px, ${yPos}px)`;
+            item.style.opacity = 1;
+        });
+
+        // 视差效果
+        window.addEventListener("mousemove", function(e) {
+            const offsetX = e.clientX - ww / 2;
+            const offsetY = e.clientY - wh / 2;
+            imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
+                const xpos = offsetX * scale;
+                const ypos = offsetY * scale * 0.01;
+                ele.setAttribute("x", sourceX + xpos);
+                ele.setAttribute("y", sourceY + ypos);
+            });
+        });
+
+        // 冷却时间逻辑
+        const now = Date.now();
+        if (now - this.lastSetupTime < this.cooldown) return;
+        this.lastSetupTime = now;
+    }
     girlCenter(width, curveHeight) {
         const imgWidth = 378;
         const imgHeight = 378;
@@ -186,13 +190,12 @@ setupParallaxImages(curveHeight) {
         this.flowEnd = false;
         let space = this.curveLength / this.navs.length;
         const animate = () => {
-            if (space > 0) {
+            if (space > 120) {
                 space -= this.navs.length;
                 this.setNavsOnPath(space);
                 requestAnimationFrame(animate);
             } else {                
                 this.flowEnd = true;
-                this.setNavsOnPath(space);
                 this.logoNavExpand();
                 this.navLogo.classList.add("jelly-animate");
                 this.navLogo.addEventListener("animationend", () => {
@@ -355,7 +358,7 @@ setupParallaxImages(curveHeight) {
         this.setupParallaxImages(curveHeight);
         this.girlCenter(ww, curveHeight);       
 
-        this.setNavsOnPath();   
+        this.setNavsOnPath();
 
         if (Math.abs(curveHeight - sideHeight) > 50) {
             this.subTitle.style.top = `${sideHeight - 50}px`;

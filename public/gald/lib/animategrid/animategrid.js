@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // 修改子元素样式
       const cardInner = this.children[0];
       if (cardInner && cardInner.children[1]) {
-        cardInner.children[1].style.backgroundColor = "var(--menu-bg-lighter)";
+        cardInner.children[1].style.backgroundColor = "var(--menu-bg-darker)";
         cardInner.children[1].style.color = "rgba(22, 22, 22, 1.0)";
       }
       transitionEnd = false;
