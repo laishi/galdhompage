@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - SVG - neon</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<svg width="1000" height="600" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		
+		<filter id="blurMe3" x="-250%" y="-250%" width="600%" height="600">
+			<feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blurred" />
+	  </filter>		
+		<filter id="blurMe2" x="-250%" y="-250%" width="600%" height="600">
+			<feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blurred" />
+	  </filter>
+		
+		<filter id="blurMe1" x="-250%" y="-250%" width="600%" height="600">
+			<feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blurred" />
+	  </filter>
+
+		
+		<g id="number-0" stroke-linecap="round" >
+			<path d="M1 0 L9 0" />
+			<path d="M10 1 L10 9" />
+			<path d="M10 11 L10 19" />
+			<path d="M9 20 L1 20" />
+			<path d="M0 19 L0 11" /> 
+			<path d="M0 9 L0 1" />
+		</g>
+		
+		
+	</defs>
+	
+	<g class="flicker number" data-color="purple" transform="translate(120 20) scale(5)">
+		<!-- <use xlink:href="#number-0" stroke-width=".8"/> -->
+		<use class="glow" xlink:href="#number-0" filter="url(#blurMe1)" stroke-width="2"/>
+		<use xlink:href="#number-0" filter="url(#blurMe2)" stroke-width=".6"/>
+		
+		<use class="white" xlink:href="#number-0" stroke-width=".4" stroke="#fff"/>
+		<use filter="url(#blurMe3)" class="white2" xlink:href="#number-0" stroke-width=".6" stroke="#fff"/>
+		<use class="white3" xlink:href="#number-0" stroke-width=".7" stroke="#fff"/>
+	</g>
+	
+
+
+</svg>
+
+  <script  src="./script.js"></script>
+
+</body>
+</html>

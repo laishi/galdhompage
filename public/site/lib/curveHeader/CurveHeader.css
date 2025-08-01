@@ -1,0 +1,220 @@
+:root {
+    --hue: 0;
+    --saturation: 72%;
+    --lightness: 40%;
+    --menu-bg: hsl(var(--hue), var(--saturation), var(--lightness));
+    --menu-bg-lighter: hsl(var(--hue), var(--saturation), 50%);
+    --menu-bg-darker: hsl(var(--hue), var(--saturation), 20%);
+    --menu-bg-verydark: hsl(var(--hue), var(--saturation), 10%);
+    --menu-bg-floordark: hsl(var(--hue), var(--saturation), 5%);
+    --header-stroke: 5px;
+    --nav-color: rgba(255, 255, 255, 0.7);
+}
+
+.CurveHeader {
+    width: 100%;
+    height: auto;
+}
+
+.svgbox {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    background-color: transparent;
+    z-index: 10;
+}
+
+.svgbox .headerbg {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.svgbox .subTitle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 50px;
+    background-color: transparent;
+    opacity: 0;
+}
+
+.svgbox .subTitle h3 {
+    position: relative;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    letter-spacing: 4px;
+    overflow: hidden;
+    background: linear-gradient(90deg, transparent, #fff, transparent);
+    background-repeat: no-repeat;
+    background-size: 80%;
+    animation: text-scan 5s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0);
+}
+
+@keyframes text-scan {
+    0% {
+    background-position: -500%;
+    }
+    100% {
+    background-position: 500%;
+    }
+}
+
+.svgbox .headerbg .useHeaderbgPathColor {
+    fill: var(--menu-bg-floordark);
+    opacity: 1;
+}
+
+.svgbox .headerbg .headerbgParallaxImages{
+    display: block;
+    opacity: 1;
+}
+
+
+.svgbox .headerbg .dancer {
+    opacity: 0;
+    transform: translate(50%, 50%);
+    transition: transform 5s ease, opacity 1s ease;
+
+}
+
+
+
+.svgbox .headerbg .headerBackgroundImg {
+    transform: scale(1.5);
+    transition: opacity 1s ease-in-out;
+}
+
+.svgbox .headerfg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.svgbox .headerfg .headderfgUse {
+    fill: rgba(0, 0, 0, 0.1);
+}
+
+.svgbox .headerfg .headerShape {
+    fill: var(--menu-bg);
+    filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5));
+}
+
+.svgbox .headerfg .curvePath {
+    fill: none;
+    stroke: var(--menu-bg);
+    stroke-width: calc(var(--header-stroke) * 1);
+    stroke-linecap: round;
+}
+
+.svgbox .headerfg .textTip {
+    fill: var(--nav-color);
+    font-size: 1.5em;
+    transition: opacity 0.3s ease;
+}
+
+.svgbox .titleInfo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    margin: 0 auto;
+}
+
+.svgbox .menus {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.svgbox .menus .nav {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    border: var(--header-stroke) solid var(--menu-bg);
+    background-color: var(--menu-bg-darker);
+    color: rgba(255, 255, 255, 0.719);
+    font-size: 1.5em;
+    will-change: offset-path, offset-distance;
+    transition: scale 0.5s ease;
+    cursor: pointer;
+}
+
+.svgbox .menus .nav span {
+    font-size: 1.5em;
+}
+
+.svgbox .menus .nav .label {
+    width: 100%;
+    letter-spacing: 0.3em;
+    text-align: center;
+}
+
+.svgbox .menus .nav.logo {
+    background-color: var(--menu-bg-darker);
+}
+
+.jelly-animate {
+    animation: jelly 0.5s ease-in-out;
+}
+
+@keyframes jelly {
+    0% {
+    transform: scale(1);
+    }
+    30% {
+    transform: scale(1.2, 1.2);
+    }
+    50% {
+    transform: scale(0.8, 0.8);
+    }
+    70% {
+    transform: scale(1.1, 1.1);
+    }
+    100% {
+    transform: scale(1);
+    }
+}
+
+.svgbox .menus .nav:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: radial-gradient(var(--menu-bg-lighter), var(--menu-bg-verydark));
+}
+
+.svgbox .menus .nav.logo img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.svgbox .menus .nav .icon-wrapper svg {
+    width: 32px;
+    height: 32px;
+}
+
+
