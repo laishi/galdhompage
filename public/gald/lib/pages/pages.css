@@ -1,0 +1,148 @@
+/* === 页面容器 === */
+:root {
+  --keyworlds-width: 50em;
+  --keyworlds-height: 50em;
+  --keyworlds-color: var(--background-color);
+}
+.pages {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  color: var(--menu-bg-lighter);
+}
+
+.pages .pageLogo {
+  width: 168px;
+  height: 168px;
+  opacity: 1;
+  transform: scale(0);
+  margin: 0 auto;
+}
+
+.pages .page{
+  position: absolute;
+  top: 0;
+  width: 80%;
+  max-width: 1900px;
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  opacity:0;
+  transform: translateY(-100%);
+  transition: transform 0.5s ease, opacity 0.1s ease;
+}
+
+.pages .pagedown {
+  display: block;
+  transform: translateY(-222px);
+  z-index: 1;
+  opacity: 1;
+}
+
+
+.pages .page .pageTitle{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.pages .page .pageTitle h3{
+  font-size: 2em;
+  margin-bottom: 3em;
+}
+
+.pages .page .pageTitle p{
+  font-size: 1.5em;
+  color: aliceblue;
+  line-height: 2em;
+}
+
+
+.pages .page .aboutIcon span{
+  font-size: 1.2em;
+  color: aliceblue;
+  line-height: 2em;
+}
+
+/* keywordsBtn */
+.keywordsBtn {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+.keywordsBtn a {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 calc(100%/6 - 1em);
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  padding: 1em;
+  background: var(--keyworlds-color);
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1.5em;
+  border-radius: 10px;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.keywordsBtn a:before {
+  content: "";
+  inset: 0 -20% 0;
+  position: absolute;
+  background: linear-gradient(45deg, white, var(--menu-bg-lighter));
+  z-index: -1;
+  height: 60%;
+  margin: auto;
+  border-radius: 20px;
+  transform: rotate(0deg);
+}
+
+/* 旋转动画类，仅在某个 a 元素上动态添加 */
+.keywordsBtn a.animate-border:before {
+  animation: 5s keywordsAnimation linear infinite;
+}
+.keywordsBtn a.animate-border {
+  opacity: 1;
+}
+
+.keywordsBtn a:after {
+  content: "";
+  inset: 2px;
+  position: absolute;
+  border-radius: 8px;
+  background: var(--keyworlds-color);
+  z-index: -1;
+}
+
+@keyframes keywordsAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+

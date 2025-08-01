@@ -1,143 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Morphing Text Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
   <style>
-    @import url('https://fonts.googleapis.com/css?family=Raleway:900&display=swap');
-
-    body {
-      margin: 0;
-      color: white;
-      overflow: hidden;
-      height: 50vh;
-    }
-
-    #morphingTexts {
+    .keywordsBtn a:before {
+      content: "";
+      inset: 0 -20% 0;
       position: absolute;
+      background: #673ab7;
+      z-index: -1;
+      height: 58%;
       margin: auto;
-      width: 100vw;
-      height: 50vh;
-      top: 0;
-      bottom: 0;
-
-      filter: url(#threshold) blur(0.6px);
     }
 
-    #morphingText1, #morphingText2 {
+    .keywordsBtn a:after {
+      content: "";
+      inset: 2px;
       position: absolute;
+      border-radius: 8px;
+      background: #673ab7;
+      z-index: -1;
+    }
+
+    .keywordsBtn a:before {
+      background: linear-gradient(45deg, white, #ffc107);
+      animation: 6s keywordsAnimation linear infinite;
+    }
+
+    @keyframes keywordsAnimation {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+ 
+
+    .keywordsBtn  {
+      display: flex;
       width: 100%;
-      display: inline-block;
-      color: rgb(7, 136, 61);
+      height: 10em;
+      display: flex;
+      flex-direction: r;
+      justify-content: center;
+      align-items: center;
+      gap: 1em;
+      background: #000;
+    }
 
-      font-family: 'Raleway', sans-serif;
-      font-size: 5em;
-
+    .keywordsBtn a {
+      text-decoration: none;
       text-align: center;
-      user-select: none;
+      display: inline-block;
+      padding: 1em;
+      background: #673ab7;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 1.2em;
+      border-radius: 10px;
+      position: relative;
+      z-index: 0;
+      font-family: "Montserrat", sans-serif;
+      overflow: hidden;
     }
   </style>
 </head>
-<body>
-  <svg id="filters" style="display: none;">
-    <filter id="threshold">
-      <feColorMatrix in="SourceGraphic"
-        type="matrix"
-        values="1 0 0 0 0  
-                0 1 0 0 0  
-                0 0 1 0 0  
-                0 0 0 255 -140" />
-    </filter>
-  </svg>
 
-  <div id="morphingTexts">
-    <span id="morphingText1"></span>
-    <span id="morphingText2"></span>
+<body>
+  <div class="keywordsBtn">
+    <!-- <div class="keywordBtn">
+      <h3>love you</h3>
+    </div> -->
+    <a href="">yes love</a>
+    <a href="">yes love</a>
+    <a href="">yes love</a>
+    <a href="">yes love</a>
+    <a href="">yes love</a>
+    <a href="">yes love</a>
   </div>
 
-  <script>
-    const elts = {
-      morphingText1: document.getElementById("morphingText1"),
-      morphingText2: document.getElementById("morphingText2")
-    };
-
-    const texts = [
-        "建筑夜景照明",
-        "城市景观照明",
-        "道路桥梁照明",
-        "商业家居照明",
-        "广场古建照明",
-        "迎春灯饰设计"
-    ];
 
 
-    const morphTime = 1;
-    const cooldownTime = 0.25;
-
-    let textIndex = texts.length - 1;
-    let time = new Date();
-    let morph = 0;
-    let cooldown = cooldownTime;
-
-    morphingText1.textContent = texts[textIndex % texts.length];
-    morphingText2.textContent = texts[(textIndex + 1) % texts.length];
-
-    function doMorph() {
-      morph -= cooldown;
-      cooldown = 0;
-
-      let fraction = morph / morphTime;
-      if (fraction > 1) {
-        cooldown = cooldownTime;
-        fraction = 1;
-      }
-
-      setMorph(fraction);
-    }
-
-    function setMorph(fraction) {
-      morphingText2.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
-      morphingText2.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
-
-      fraction = 1 - fraction;
-      morphingText1.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
-      morphingText1.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
-
-      morphingText1.textContent = texts[textIndex % texts.length];
-      morphingText2.textContent = texts[(textIndex + 1) % texts.length];
-    }
-
-    function doCooldown() {
-      morph = 0;
-      morphingText2.style.filter = "";
-      morphingText2.style.opacity = "100%";
-
-      morphingText1.style.filter = "";
-      morphingText1.style.opacity = "0%";
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      let newTime = new Date();
-      let shouldIncrementIndex = cooldown > 0;
-      let dt = (newTime - time) / 1000;
-      time = newTime;
-
-      cooldown -= dt;
-
-      if (cooldown <= 0) {
-        if (shouldIncrementIndex) {
-          textIndex++;
-        }
-
-        doMorph();
-      } else {
-        doCooldown();
-      }
-    }
-
-    animate();
-  </script>
 </body>
+
 </html>

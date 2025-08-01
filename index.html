@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/public/gald/lib/accordion/accordion.css">
     <link rel="stylesheet" href="/public/gald/lib/ripplecss/ripplecss.css">
     <link rel="stylesheet" href="/public/gald/lib/iconfont/iconfont.css">
-    <link rel="stylesheet" href="/public/gald/css/pages.css">
+    <link rel="stylesheet" href="/public/gald/lib/pages/pages.css">
     <link rel="stylesheet" href="/public/gald/css/style.css">
 </head>
 
@@ -38,27 +38,6 @@
                         <clipPath id="CurveHeader-headerbgClip">
                             <path id="CurveHeader-headerbgPath" d="" />
                         </clipPath>
-                        <radialGradient id="CurveHeader-headerbgGradient" cx="50%" cy="38%" r="50%"
-                            gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#ffffff" />
-                            <stop offset="5%" stop-color="#f0f0f0" />
-                            <stop offset="5.01%" stop-color="#eaeaea" />
-                            <stop offset="12%" stop-color="#dcdcdc" />
-                            <stop offset="12.01%" stop-color="#cecece" />
-                            <stop offset="21%" stop-color="#c0c0c0" />
-                            <stop offset="21.01%" stop-color="#b2b2b2" />
-                            <stop offset="32%" stop-color="#a4a4a4" />
-                            <stop offset="32.01%" stop-color="#969696" />
-                            <stop offset="45%" stop-color="#888888" />
-                            <stop offset="45.01%" stop-color="#7a7a7a" />
-                            <stop offset="60%" stop-color="#6c6c6c" />
-                            <stop offset="60.01%" stop-color="#5e5e5e" />
-                            <stop offset="76%" stop-color="#505050" />
-                            <stop offset="76.01%" stop-color="#424242" />
-                            <stop offset="93%" stop-color="#2c2c2c" />
-                            <stop offset="93.01%" stop-color="#161616" />
-                            <stop offset="100%" stop-color="#000000" />
-                        </radialGradient>
                     </defs>
                     <use class="useHeaderbgPathColor" href="#CurveHeader-headerbgPath" />
 
@@ -143,7 +122,14 @@
             <div class="projectsTitle pageTitle">
                 <img class="pageLogo" src="/public/assets/logo/gald-logo-all.svg" loading="lazy" alt="灯饰设计">
                 <h3>设计项目</h3>
-                <p>建筑夜景照明/城市景观照明/道路桥梁照明/商业家居照明/广场古建照明/迎春灯饰设计</p>
+
+                <div class="keywordsBtn">
+                    <a href="">建筑夜景照明</a>
+                    <a href="">城市景观照明</a>
+                    <a href="">道路桥梁照明</a>
+                    <a href="">广场古建照明</a>
+                    <a href="">迎春灯饰设计</a>
+                </div>
             </div>
 
             <div class="grid grid--full">
@@ -1402,6 +1388,7 @@
     </div>
     
     <script src="/public/gald/lib/curveHeader/CurveHeader.js"></script>
+    <script src="/public/gald/lib/pages/page.js"></script>
     <script src="/public/gald/lib/animategrid/animategrid-main.js"></script>
     <script src="/public/gald/lib/animategrid/animategrid.js"></script>
     
