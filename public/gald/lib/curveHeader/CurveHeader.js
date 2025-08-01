@@ -70,11 +70,14 @@ class CurveHeader {
         window.addEventListener('resize', () => {
             this.updatePath();
             this.setupParallaxImages(this.curveHeight);
+            console.log("resize windows 完成");
+            
         });
         window.addEventListener('scroll', () => {
             this.scrollY = window.scrollY || document.documentElement.scrollTop;
             this.updatePath(this.scrollY);
             this.pageLogoScale(this.scrollY);
+            console.log("scrolll windows 完成");
         });
     }
 
@@ -86,77 +89,73 @@ class CurveHeader {
     }
 
 
-lazyImg() {
-    const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
-    const jzledElement = document.querySelector(".clipImg.jzled");
+    lazyImg() {
+        const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
+        const jzledElement = document.querySelector(".clipImg.jzled");
 
-    // 优先加载 jzled 图片
-    if (jzledElement) {
-        const src = jzledElement.getAttribute("data-href");
-        if (src) {
-            console.time("jzledLoad");
-            jzledElement.setAttribute("href", src);
-            console.log("jzled image href set:", src);
+        // 优先加载 jzled 图片
+        if (jzledElement) {
+            const src = jzledElement.getAttribute("data-href");
+            if (src) {
+                console.time("jzledLoad");
+                jzledElement.setAttribute("href", src);
+                console.log("jzled image href set:", src);
 
-            // 监听 jzled 图片加载完成
-            jzledElement.addEventListener("load", () => {
-                console.timeEnd("jzledLoad");
-                console.log("jzled image fully loaded:", src);
-                this.headerMask(); // 在 jzled 加载完成后调用 headerMask
-                this.updatePath(); // 确保剪裁路径同步更新
-            }, { once: true });
+                // 监听 jzled 图片加载完成
+                jzledElement.addEventListener("load", () => {
+                    console.timeEnd("jzledLoad");
+                    console.log("jzled image fully loaded:", src);
+                    this.headerMask(); // 在 jzled 加载完成后调用 headerMask
+                    this.updatePath(); // 确保剪裁路径同步更新
+                }, { once: true });
 
-            // 错误处理
-            jzledElement.addEventListener("error", () => {
-                console.error("Failed to load jzled image:", src);
-            }, { once: true });
+                // 错误处理
+                jzledElement.addEventListener("error", () => {
+                    console.error("Failed to load jzled image:", src);
+                }, { once: true });
+            } else {
+                console.warn("jzled image missing data-href:", jzledElement);
+            }
+        }
+
+        if ("IntersectionObserver" in window) {
+            const observer = new IntersectionObserver(
+                (entries, observer) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const el = entry.target;
+                            const src = el.getAttribute("data-href");
+                            if (src) {
+                                el.setAttribute("href", src);
+                                el.addEventListener("load", () => {
+                                }, { once: true });
+                            } else {
+                                console.warn("No valid image source for:", el);
+                            }
+                            observer.unobserve(el);
+                        }
+                    });
+                },
+                {
+                    rootMargin: "200px",
+                    threshold: 0.1,
+                }
+            );
+
+            lazyElements.forEach((el) => {
+                observer.observe(el);
+            });
         } else {
-            console.warn("jzled image missing data-href:", jzledElement);
+            // 后备方案：直接加载所有图片
+            lazyElements.forEach((el) => {
+                const src = el.getAttribute("data-href");
+                if (src) {
+                    el.setAttribute("href", src);
+                } else {
+                }
+            });
         }
     }
-
-    if ("IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(
-            (entries, observer) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const el = entry.target;
-                        const src = el.getAttribute("data-href");
-                        if (src) {
-                            el.setAttribute("href", src);
-                            console.log("Lazy loaded image:", src);
-                            el.addEventListener("load", () => {
-                                console.log("Image fully loaded:", src);
-                            }, { once: true });
-                        } else {
-                            console.warn("No valid image source for:", el);
-                        }
-                        observer.unobserve(el);
-                    }
-                });
-            },
-            {
-                rootMargin: "200px",
-                threshold: 0.1,
-            }
-        );
-
-        lazyElements.forEach((el) => {
-            observer.observe(el);
-        });
-    } else {
-        // 后备方案：直接加载所有图片
-        lazyElements.forEach((el) => {
-            const src = el.getAttribute("data-href");
-            if (src) {
-                el.setAttribute("href", src);
-                console.log("Fallback loaded image:", src);
-            } else {
-                console.warn("No valid image source for:", el);
-            }
-        });
-    }
-}
 
 
 
@@ -275,7 +274,6 @@ lazyImg() {
                 this.flowEnd = true;
                 this.logoNavExpand();
                 
-                this.setupParallaxImages(this.curveHeight);
                 this.navLogo.classList.add("jelly-animate");
                 this.navLogo.addEventListener("animationend", () => {
                 this.navLogo.classList.remove("jelly-animate");
@@ -439,11 +437,18 @@ lazyImg() {
         this.curveData = curveData;
         this.curveLength = this.curvePath.getTotalLength();
 
-        console.log("svg 初始化完成");
         
-
-
+        
+        if (Math.abs(curveHeight - sideHeight) > 50) {
+            this.subTitle.style.top = `${sideHeight - 50}px`;
+            this.subTitle.style.opacity = 1;
+        } else {
+            this.subTitle.style.opacity = 0;
+        }
+        
         this.initfun(ww, curveHeight);
+        console.log("svg 初始化完成");
+
     }
 
     initfun(ww, curveHeight) {
@@ -451,19 +456,10 @@ lazyImg() {
         this.girlCenter(ww, curveHeight);
         this.setNavsOnPath();
 
+
         console.log("加载其他资源");
+
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
@@ -471,3 +467,4 @@ lazyImg() {
 document.addEventListener('DOMContentLoaded', () => {
     window['CurveHeader'] = new CurveHeader('CurveHeader', true, { svgHeight: 70, isdown: true });
 });
+
