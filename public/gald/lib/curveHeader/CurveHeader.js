@@ -34,13 +34,14 @@ class CurveHeader {
         this.navTip = document.querySelector(`#${idName} .headerfg .navTip`);
         this.menu = document.querySelector(`#${idName} .svgbox .menus`);
         this.navs = document.querySelectorAll(`#${idName} .svgbox .menus .nav`);
-        this.pages = document.querySelectorAll(".page");
-        this.pagedown = document.querySelectorAll(".page.pagedown");
-        this.pageLogo = document.querySelectorAll(".page .pageLogo");
         this.navLogo = document.querySelector(`#${idName} .nav.logo`);
         this.headerImage = document.querySelector(`#${idName} .svgbox .headerBackgroundImg`);
         this.girlImg = document.querySelector(`#${idName} .girlImg`);
         this.textTip = document.querySelectorAll(`#${idName} .svgbox .textTip`);
+
+        this.pages = document.querySelectorAll(".page");
+        this.pagedown = document.querySelectorAll(".page.pagedown");
+        this.pageLogo = document.querySelectorAll(".page .pageLogo");
 
         this.curveHeight = 0;
         this.curveLength = 0;
@@ -197,6 +198,7 @@ class CurveHeader {
             } else {                
                 this.flowEnd = true;
                 this.logoNavExpand();
+                this.headerMask();
                 this.navLogo.classList.add("jelly-animate");
                 this.navLogo.addEventListener("animationend", () => {
                 this.navLogo.classList.remove("jelly-animate");
@@ -204,6 +206,11 @@ class CurveHeader {
             }
         };
         requestAnimationFrame(animate);
+    }
+
+    headerMask() {
+        const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
+        useHeaderbgPathMask.style.opacity = 0;
     }
 
     logoNavExpand() {

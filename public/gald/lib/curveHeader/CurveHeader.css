@@ -77,6 +77,13 @@
     opacity: 1;
 }
 
+.svgbox .headerbg .useHeaderbgPathMask {
+    fill: var(--menu-bg-floordark);
+    opacity: 1;
+    transition: opacity 3s ease;
+}
+
+
 .svgbox .headerbg .headerbgParallaxImages{
     display: block;
     opacity: 1;
