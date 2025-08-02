@@ -3,7 +3,6 @@
     flex-direction: row;
     width: 100%;
     height: 50vh;
-    margin: 5em auto;
 }
 
 .accordion {
@@ -53,18 +52,19 @@
     color: rgb(168, 168, 168);
 }
 
+
+
+.accordion .accordionCont h3 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.accordion .accordionCont p {
+    font-size: 1.0em;    
+}
 .accordion span {
     font-size: 24px;
     line-height: 50px;
     color: aliceblue;
     text-align: center;
-}
-
-.accordion h3 {
-    font-size: 1.5em;
-    text-align: center;
-}
-
-.accordion .accordionHeader span {
-    font-size: 1.2em;    
 }

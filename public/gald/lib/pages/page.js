@@ -10,9 +10,9 @@ class PagesManager {
 
   init() {
     this.navToPage();
-    this.startKeywordAnimationCycle();
     this.expandPagesHeight();
     this.logoScale();
+    this.keywordAnimationCycle();
   }
 
   navToPage() {   
@@ -20,21 +20,24 @@ class PagesManager {
     this.navs.forEach((nav, index) => {
       nav.addEventListener("click", () => {
       const viewboxHeight = window.CurveHeader?.sideHeight-300;
-      console.log("svgHeight:", viewboxHeight);
         this.pageList.forEach(page => page.classList.remove("pagedown"));
         this.pageList[index].classList.add("pagedown");
         
         const pageHeight = this.pageList[index].offsetHeight;
         this.pagesContainer.style.height = `${pageHeight}px`
         this.currentPage = this.pageList[index];
+
         lenis.scrollTo(viewboxHeight, {
           duration: 1.2,
           easing: (t) => t * (2 - t)
         });
 
+        this.keywordAnimationCycle();
+
 
       });
     });
+    
   }
 
   expandPagesHeight() {
@@ -50,8 +53,11 @@ class PagesManager {
     this.pagesContainer.style.height = `${maxBottom}px`;
   }
 
-  startKeywordAnimationCycle() {
-    const links = document.querySelectorAll(".keywordsBtn a");
+  keywordAnimationCycle() {
+    const pagedown = this.pagesContainer.querySelector(".pagedown");
+    const links = pagedown.querySelectorAll(".keywordsBtn a");
+    console.log("this.links: ", links);
+    
     let currentIndex = 0;
 
     setInterval(() => {
