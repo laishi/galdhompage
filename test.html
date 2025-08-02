@@ -1,92 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>页面布局测试</title>
   <style>
-    .keywordsBtn a:before {
-      content: "";
-      inset: 0 -20% 0;
-      position: absolute;
-      background: #673ab7;
-      z-index: -1;
-      height: 58%;
-      margin: auto;
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
     }
 
-    .keywordsBtn a:after {
-      content: "";
-      inset: 2px;
-      position: absolute;
-      border-radius: 8px;
-      background: #673ab7;
-      z-index: -1;
-    }
-
-    .keywordsBtn a:before {
-      background: linear-gradient(45deg, white, #ffc107);
-      animation: 6s keywordsAnimation linear infinite;
-    }
-
-    @keyframes keywordsAnimation {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
- 
-
-    .keywordsBtn  {
-      display: flex;
-      width: 100%;
-      height: 10em;
-      display: flex;
-      flex-direction: r;
-      justify-content: center;
-      align-items: center;
-      gap: 1em;
+    html,
+    body {
       background: #000;
+      width: 100%;
+      height: 100%;
     }
 
-    .keywordsBtn a {
-      text-decoration: none;
-      text-align: center;
-      display: inline-block;
-      padding: 1em;
-      background: #673ab7;
-      color: #fff;
-      text-transform: uppercase;
-      font-size: 1.2em;
-      border-radius: 10px;
+    .pages {
       position: relative;
-      z-index: 0;
-      font-family: "Montserrat", sans-serif;
-      overflow: hidden;
+      width: 100%;
+      height: auto;
+      background-color: aqua;
     }
+
+    .pages .page {
+      position: relative;
+      width: 25%;
+      min-height: 500px;
+      background-color: rgb(148, 97, 21);
+    }
+
+
+    .pages .page:nth-child(odd) {
+      background-color: rgb(21, 148, 32);
+    }
+
+rgb(21, 148, 21)
+
   </style>
 </head>
 
 <body>
-  <div class="keywordsBtn">
-    <!-- <div class="keywordBtn">
-      <h3>love you</h3>
-    </div> -->
-    <a href="">yes love</a>
-    <a href="">yes love</a>
-    <a href="">yes love</a>
-    <a href="">yes love</a>
-    <a href="">yes love</a>
-    <a href="">yes love</a>
+  <div class="pages">
+    <div class="page">page1<br>内容高度自适应<br>可以有更多内容</div>
+    <div class="page">page2<br>不同高度的内容</div>
+    <div class="page">page3<br>更多内容<br>更多内容</div>
+    <div class="page">page4</div>
+    <div class="page">page5</div>
   </div>
-
-
-
 </body>
 
 </html>

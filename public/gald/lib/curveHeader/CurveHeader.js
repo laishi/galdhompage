@@ -41,7 +41,7 @@ class CurveHeader {
 
         this.pages = document.querySelectorAll(".page");
         this.pagedown = document.querySelectorAll(".page.pagedown");
-        this.pageLogo = document.querySelectorAll(".page .pageLogo");
+        
 
         this.curveHeight = 0;
         this.curveLength = 0;
@@ -66,28 +66,17 @@ class CurveHeader {
         this.changeHue();
         this.navFlow();
         this.navsTip();
-        this.navToPage(this.pages);
         window.addEventListener('resize', () => {
             this.updatePath();
             this.setupParallaxImages(this.curveHeight);
-            console.log("resize windows 完成");
+            
             
         });
         window.addEventListener('scroll', () => {
             this.scrollY = window.scrollY || document.documentElement.scrollTop;
             this.updatePath(this.scrollY);
-            this.pageLogoScale(this.scrollY);
-            console.log("scrolll windows 完成");
         });
     }
-
-    pageLogoScale(scrollY) {
-        const limitScale = Math.min(1, scrollY * 0.005);
-        this.pageLogo.forEach((logo) => {
-            logo.style.transform = `scale(${limitScale})`;
-        });
-    }
-
 
     lazyImg() {
         const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
@@ -99,12 +88,10 @@ class CurveHeader {
             if (src) {
                 console.time("jzledLoad");
                 jzledElement.setAttribute("href", src);
-                console.log("jzled image href set:", src);
+                
 
                 // 监听 jzled 图片加载完成
-                jzledElement.addEventListener("load", () => {
-                    console.timeEnd("jzledLoad");
-                    console.log("jzled image fully loaded:", src);
+                jzledElement.addEventListener("load", () => {                    
                     this.headerMask(); // 在 jzled 加载完成后调用 headerMask
                     this.updatePath(); // 确保剪裁路径同步更新
                 }, { once: true });
@@ -157,24 +144,6 @@ class CurveHeader {
         }
     }
 
-
-
-    navToPage(pages) {
-        
-        this.navs.forEach((nav, index) => {
-            nav.addEventListener("click", () => {
-                pages.forEach((page) => {
-                    page.classList.remove("pagedown");
-                });
-                const pageHeight = pages[index].offsetHeight;
-                pages[index].classList.add("pagedown");
-            });
-        });
-
-        this.pages.forEach(page => {
-            page.addEventListener("transitionend", () => {});
-        });
-    }
 
     remap(value, inMin, inMax, outMin, outMax) {
         return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
@@ -414,8 +383,8 @@ class CurveHeader {
         const centerRight = ww - centerLeft;
         const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
         const headData = curveData + ` V 0 H 0 Z`;
-        let viewboxHeight = Math.max(curveHeight, sideHeight) + 100;
-        viewboxHeight = sideHeight + middleOffset + 100;
+        let viewboxHeight = Math.max(curveHeight, sideHeight) + 50;
+        viewboxHeight = sideHeight + middleOffset + 50;
 
         this.titleInfo.style.height = `${curveHeight}px`;
         this.svgbox.style.height = `${viewboxHeight}px`;
@@ -447,7 +416,7 @@ class CurveHeader {
         }
         
         this.initfun(ww, curveHeight);
-        console.log("svg 初始化完成");
+        
 
     }
 
@@ -457,7 +426,7 @@ class CurveHeader {
         this.setNavsOnPath();
 
 
-        console.log("加载其他资源");
+        
 
     }
 
