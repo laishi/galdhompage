@@ -79,11 +79,8 @@ class CurveHeader {
         window.addEventListener('scroll', () => {
             this.scrollY = window.scrollY || document.documentElement.scrollTop;
             this.updatePath(this.scrollY);
-            // this.setupParallaxImages();
         });
     }
-
-
 
     lazyImg() {
         const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
@@ -93,11 +90,7 @@ class CurveHeader {
         if (jzledElement) {
             const src = jzledElement.getAttribute("data-href");
             if (src) {
-                console.time("jzledLoad");
                 jzledElement.setAttribute("href", src);
-                
-
-                // 监听 jzled 图片加载完成
                 jzledElement.addEventListener("load", () => {                    
                     this.headerMask(); // 在 jzled 加载完成后调用 headerMask
                     this.updatePath(); // 确保剪裁路径同步更新
