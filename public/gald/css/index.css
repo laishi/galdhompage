@@ -13,10 +13,14 @@
 }
 
 body {
-  background-color: var(--background-color);
-  background-color: 080b12;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  font-family:
+    "Microsoft YaHei",   /* Windows 中文黑体 */
+    "PingFang SC",       /* macOS 中文黑体 */
+    "Heiti SC",          /* macOS 老黑体 */
+    "Helvetica Neue",
+    "Helvetica",
+    "Arial",
+    sans-serif;
 }
 
 .galdLogo {
