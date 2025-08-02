@@ -5,6 +5,8 @@ class PagesManager {
     this.navs = document.querySelectorAll(".nav");
     this.currentPage = null;
 
+    this.navState = {}
+
     this.init();
   }
 
@@ -13,30 +15,70 @@ class PagesManager {
     this.expandPagesHeight();
     this.logoScale();
     this.keywordAnimationCycle();
+    this.goHome();
+    this.hashSroll()
   }
 
-  navToPage() {   
+  hashSroll() {
+    if (location.hash === '#scroll500') {
+      window.scrollTo({
+        top: 500,
+        behavior: 'smooth' // 可选：平滑滚动
+      });
+    }
+
+  }
+
+
+
+  // gohome 函数：跳转到首页
+  goHome() {
+    const pageTitle = document.querySelector('.pageTitle');
+    const pageTitleImg = document.querySelector('.pageTitle img');
+    const pageTitleh3 = document.querySelector('.pageTitle h3');
+    const titleh3Text = pageTitleh3.innerText;
+    pageTitle.addEventListener('click', () => {
+      window.location.href = '/';
+    });
+    pageTitleImg.addEventListener('mouseover', () => {
+      pageTitleh3.innerText = "回到首页";
+    });
+
+    pageTitleImg.addEventListener('mouseout', () => {
+      pageTitleh3.innerText = titleh3Text;
+    });
+  }
+
+  navToPage() {
     
     this.navs.forEach((nav, index) => {
       nav.addEventListener("click", () => {
-      const viewboxHeight = window.CurveHeader?.sideHeight-300;
+        
+        const viewboxHeight = window.CurveHeader?.sideHeight-300;
         this.pageList.forEach(page => page.classList.remove("pagedown"));
         this.pageList[index].classList.add("pagedown");
         
         const pageHeight = this.pageList[index].offsetHeight;
         this.pagesContainer.style.height = `${pageHeight}px`
         this.currentPage = this.pageList[index];
-
+        
         lenis.scrollTo(viewboxHeight, {
           duration: 1.2,
           easing: (t) => t * (2 - t)
         });
-
+        
         this.keywordAnimationCycle();
-
+        
+        this.navState.index = index;
+        this.navState.navName = nav.className;
+        this.navState.page = this.pageList[index].className;
+        this.navState.viewboxHeight = viewboxHeight;
+        console.log("this.navState.: ", this.navState);
 
       });
     });
+
+    
     
   }
 

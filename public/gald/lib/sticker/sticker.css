@@ -1,0 +1,272 @@
+:root {
+    --wall-color: var(--background-color);
+    --shadow-color: 45deg 34% 48%;
+    --shadow-elevation-medium: -1px 1px 1.1px hsl(var(--shadow-color) / 0.7),
+        -1.3px 1.3px 1.4px -1.2px hsl(var(--shadow-color) / 0.56),
+        -3.6px 3.6px 3.8px -2.5px hsl(var(--shadow-color) / 0.42),
+        -9.9px 9.9px 10.5px -3.7px hsl(var(--shadow-color) / 0.28),
+        -22.1px 22.1px 23.4px -5px hsl(var(--shadow-color) / 0.14);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: var(--wall-color);
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    font-family: "Ma Shan Zheng", cursive, sans-serif;
+    overflow-x: hidden;
+}
+
+.sticker-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.sticker {
+    width: 100%;
+    height: 500px;
+    background-color: white;
+    border-radius: 0 0 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 15px;
+    box-shadow: var(--shadow-elevation-medium);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+/* Unique rotation for each sticker */
+.sticker:nth-child(1) {
+    transform: rotate(-2deg);
+}
+
+.sticker:nth-child(2) {
+    transform: rotate(3deg) translateY(20px);
+}
+
+.sticker:nth-child(3) {
+    transform: rotate(-1deg) translateY(10px);
+}
+
+.sticker:nth-child(4) {
+    transform: rotate(4deg) translateY(30px);
+}
+
+.sticker:nth-child(5) {
+    transform: rotate(-3deg) translateY(15px);
+}
+
+.sticker:nth-child(6) {
+    transform: rotate(2deg) translateY(25px);
+}
+
+.sticker:nth-child(7) {
+    transform: rotate(-4deg) translateY(5px);
+}
+
+.sticker:nth-child(8) {
+    transform: rotate(1deg) translateY(20px);
+}
+
+.sticker:nth-child(9) {
+    transform: rotate(-2deg) translateY(10px);
+}
+
+.sticker:nth-child(10) {
+    transform: rotate(3deg) translateY(15px);
+}
+
+.sticker:hover {
+    transform: rotate(0deg) translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+}
+
+.sticker::before {
+    content: "";
+    height: 30px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 12px 12px 0 0;
+}
+
+.sticker-header {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+    border-bottom: 2px dashed #eee;
+    padding-bottom: 8px;
+}
+
+.sticker .item {
+    --shadow-color: 0deg 0% 55%;
+    min-height: 0;
+    flex: 1;
+    transition: all 250ms;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    background-color: var(--item-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.sticker .item .close {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 5px;
+    top: 5px;
+    background-color: #ff004d;
+    border-radius: 50%;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 250ms;
+}
+
+.sticker .item.active .close {
+    opacity: 0.6;
+    pointer-events: auto;
+}
+
+.sticker .item.active .close:hover {
+    opacity: 0.8;
+}
+
+.sticker .item.active .close:active {
+    opacity: 1;
+}
+
+/* Different colors for each sticker */
+.sticker-1 .item {
+    --item-color: #ffd6e0;
+    --item-color-dark: #c51d40;
+}
+
+.sticker-2 .item {
+    --item-color: #d0f4de;
+    --item-color-dark: #1a7d4e;
+}
+
+.sticker-3 .item {
+    --item-color: #fcf6bd;
+    --item-color-dark: #b8860b;
+}
+
+.sticker-4 .item {
+    --item-color: #a9def9;
+    --item-color-dark: #0b6e9e;
+}
+
+.sticker-5 .item {
+    --item-color: #e4c1f9;
+    --item-color-dark: #6a0dad;
+}
+
+.sticker-6 .item {
+    --item-color: #ffd8b1;
+    --item-color-dark: #c66900;
+}
+
+.sticker-7 .item {
+    --item-color: #b2e2e2;
+    --item-color-dark: #2e7d7d;
+}
+
+.sticker-8 .item {
+    --item-color: #f4b3d7;
+    --item-color-dark: #8e3f6b;
+}
+
+.sticker-9 .item {
+    --item-color: #d1e8ff;
+    --item-color-dark: #1e5b99;
+}
+
+.sticker-10 .item {
+    --item-color: #f4e1b9;
+    --item-color-dark: #8b6f00;
+}
+
+.note {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    color: #333;
+}
+
+.heading {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.content {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 250ms;
+}
+
+.item.active {
+    flex: 3;
+    animation: expand 0.5s ease-out;
+}
+
+.item.active .content {
+    opacity: 1;
+    height: auto;
+    flex: 1;
+    padding: 5px 0;
+}
+
+.item.active .heading {
+    color: var(--item-color-dark);
+    border-bottom: 1px dashed var(--item-color-dark);
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+}
+
+@keyframes expand {
+    0% {
+        flex: 1;
+    }
+
+    50% {
+        flex: 3.5;
+    }
+
+    100% {
+        flex: 3;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sticker-wall {
+        grid-template-columns: 1fr;
+    }
+
+    .sticker {
+        height: auto;
+        min-height: 300px;
+    }
+}

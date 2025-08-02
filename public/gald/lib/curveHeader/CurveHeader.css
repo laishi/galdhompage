@@ -91,9 +91,7 @@
 
 
 .svgbox .headerbg .dancer {
-    opacity: 1;
     transition: transform 3s ease, opacity 1s ease;
-    animation-delay: 30s;
 }
 
 
