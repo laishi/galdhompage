@@ -56,7 +56,7 @@ class CurveHeader {
         this.imageUrls = imageUrls;
         this.navTips = navTips;
         this.lastSetupTime = 0;
-        this.cooldown = 500;
+        this.cooldown = 1000;
         this.flowEnd = false;
         this.init();
     }
@@ -67,10 +67,12 @@ class CurveHeader {
         this.changeHue();
         this.navFlow();
         this.navsTip();
+        this.handlerEvent()
+    }
+    
+    handlerEvent() {        
         window.addEventListener('resize', () => {
-            this.updatePath();
-            this.setupParallaxImages(this.curveHeight);
-            
+            this.updatePath();           
             
         });
         window.addEventListener('scroll', () => {
@@ -78,6 +80,8 @@ class CurveHeader {
             this.updatePath(this.scrollY);
         });
     }
+
+
 
     lazyImg() {
         const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
@@ -159,68 +163,91 @@ class CurveHeader {
         }, 5000);
     }
 
-    setupParallaxImages(curveHeight) {
-        const clipImages = document.querySelectorAll(".clipImg");
-        const dancer = document.querySelectorAll(".dancer");
-        const rains = document.querySelectorAll(".rain");
-        const jzled = document.querySelector(".jzled");
-        const ww = window.innerWidth;
-        const wh = window.innerHeight;
 
-        // 设置 jzled 位置
-        jzled.style.transition = "";
-        jzled.setAttribute("x", (ww - 1225) / 2);
-        jzled.setAttribute("y", curveHeight / 5);
 
-        // 初始化 imageStates 用于视差效果
-        const imageStates = Array.from(clipImages).map((ele, index) => {
-            const x = parseFloat(ele.getAttribute("x")) || 0;
-            const y = parseFloat(ele.getAttribute("y")) || 0;
-            return {
-                ele,
-                sourceX: x,
-                sourceY: y,
-                scale: 0.01 * index
-            };
+
+
+
+
+
+setupParallaxImages(curveHeight) {
+    const clipImages = document.querySelectorAll(".clipImg");
+    const dancer = document.querySelectorAll(".dancer");
+    const rains = document.querySelectorAll(".rain");
+    const jzled = document.querySelector(".jzled");
+    const ww = window.innerWidth;
+    const wh = window.innerHeight;
+
+    // Set jzled position
+    jzled.style.transition = "";
+    jzled.setAttribute("x", (ww - 1225) / 2);
+    jzled.setAttribute("y", curveHeight / 5);
+
+    // Get the bounding box of the jzled element
+    const jzledBBox = jzled.getBBox();
+    const jzledWidth = jzledBBox.width;
+    const jzledX = parseFloat(jzled.getAttribute("x")) || 0;
+
+    // Initialize imageStates for parallax effect
+    const imageStates = Array.from(clipImages).map((ele, index) => {
+        const x = parseFloat(ele.getAttribute("x")) || 0;
+        const y = parseFloat(ele.getAttribute("y")) || 0;
+        return {
+            ele,
+            sourceX: x,
+            sourceY: y,
+            scale: 0.01 * index
+        };
+    });
+
+    // Set dancer position
+    dancer.forEach((item, index) => {
+        // Get SVG initial x and y
+        const initialX = parseFloat(item.getAttribute("x")) || 0;
+        const initialY = parseFloat(item.getAttribute("y")) || 0;
+
+        // Calculate random position within the jzled width
+        const minX = jzledX;
+        const maxX = jzledX + jzledWidth;
+        const randomX = minX + Math.random() * (maxX - minX);
+
+        // Y position remains the same as in the original code
+        const minY = curveHeight - (dancer.length - index) * 300;
+        const maxY = curveHeight / 5 + 527 * 0.6;
+        const yPos = Math.max(minY, maxY) + initialY;
+
+        // Apply transform to ensure position is within the jzled width
+        item.style.transform = `translate(${randomX}px, ${yPos}px)`;
+        item.style.opacity = 1;
+    });
+
+    // Parallax effect
+    window.addEventListener("mousemove", function(e) {
+        const offsetX = e.clientX - ww / 2;
+        const offsetY = e.clientY - wh / 2;
+        imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
+            const xpos = offsetX * scale;
+            const ypos = offsetY * scale * 0.01;
+            ele.setAttribute("x", sourceX + xpos);
+            ele.setAttribute("y", sourceY + ypos);
         });
+    });
 
-        // 设置 dancer 位置
-        dancer.forEach((item, index) => {
-            // 获取 SVG 初始 x 和 y
-            const initialX = parseFloat(item.getAttribute("x")) || 0;
-            const initialY = parseFloat(item.getAttribute("y")) || 0;
+    // Cooldown logic
+    const now = Date.now();
+    if (now - this.lastSetupTime < this.cooldown) return;
+    this.lastSetupTime = now;
+}
 
-            // 计算随机位置，基于窗口中心点
-            const minX = ww * 0.2;
-            const maxX = ww - minX;
-            const randomX = minX + Math.random() * (maxX - minX) + initialX; // 结合初始 x
+    
 
-            const minY = curveHeight - (dancer.length - index) * 300;
-            const maxY = curveHeight / 5 + 527 * 0.6;
-            const yPos = Math.max(minY, maxY) + initialY; // 结合初始 y
 
-            // 应用 transform 确保位置在屏幕内
-            item.style.transform = `translate(${randomX}px, ${yPos}px)`;
-            item.style.opacity = 1;
-        });
 
-        // 视差效果
-        window.addEventListener("mousemove", function(e) {
-            const offsetX = e.clientX - ww / 2;
-            const offsetY = e.clientY - wh / 2;
-            imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
-                const xpos = offsetX * scale;
-                const ypos = offsetY * scale * 0.01;
-                ele.setAttribute("x", sourceX + xpos);
-                ele.setAttribute("y", sourceY + ypos);
-            });
-        });
 
-        // 冷却时间逻辑
-        const now = Date.now();
-        if (now - this.lastSetupTime < this.cooldown) return;
-        this.lastSetupTime = now;
-    }
+
+
+
+
     girlCenter(width, curveHeight) {
         const imgWidth = 378;
         const imgHeight = 378;
