@@ -257,24 +257,25 @@ class CurveHeader {
         useHeaderbgPathMask.style.opacity = 0;
     }
 
-    logoNavExpand() {
-        let animating = false;
-        let animated = false;
+logoNavExpand() {
+    let animating = false;
+    let animated = false;
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 0) {
-                animated = false;
-            }
-        });
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 0) {
+            animated = false;
+        }
+    });
 
-        this.navLogo.addEventListener("mouseover", () => {
+    const setupMouseoverAnimate = (element) => {
+        element.addEventListener("mouseover", () => {
             if (window.scrollY !== 0 || animating || animated) return;
             animating = true;
             let space = 0;
 
             const animate = () => {
                 if (space < 120) {
-                    space += 5;
+                    space += 10;
                     this.setNavsOnPath(space);
                     requestAnimationFrame(animate);
                 } else {
@@ -282,9 +283,15 @@ class CurveHeader {
                     animated = true;
                 }
             };
+
             requestAnimationFrame(animate);
         });
-    }
+    };
+
+    setupMouseoverAnimate(this.navLogo);
+    setupMouseoverAnimate(this.headerShape);
+}
+
 
     setNavsOnPath(navSpace = 0) {
         let gap = navSpace / this.curveLength;
@@ -383,8 +390,8 @@ class CurveHeader {
         const centerRight = ww - centerLeft;
         const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
         const headData = curveData + ` V 0 H 0 Z`;
-        let viewboxHeight = Math.max(curveHeight, sideHeight) + 50;
-        viewboxHeight = sideHeight + middleOffset + 50;
+        let viewboxHeight = Math.max(curveHeight, sideHeight) + 75;
+        // viewboxHeight = sideHeight + middleOffset + 50;
 
         this.titleInfo.style.height = `${curveHeight}px`;
         this.svgbox.style.height = `${viewboxHeight}px`;

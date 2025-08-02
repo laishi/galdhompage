@@ -1,7 +1,7 @@
 /* === 基础样式 === */
 
 :root {
-  --background-color: rgb(25, 25, 25);
+  --background-color: rgb(30, 30, 30);
   --page-bgimg: url(/public/gald/img/backgrounds/bg-subtle-1-dark-800w.jpg);
 }
 

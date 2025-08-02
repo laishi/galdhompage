@@ -20,9 +20,18 @@ class PagesManager {
       nav.addEventListener("click", () => {
         this.pageList.forEach(page => page.classList.remove("pagedown"));
         this.pageList[index].classList.add("pagedown");
+
+        
         const pageHeight = this.pageList[index].offsetHeight;
         this.pagesContainer.style.height = `${pageHeight}px`
         this.currentPage = this.pageList[index];
+
+lenis.scrollTo(550, {
+  duration: 1.2,
+  easing: (t) => t * (2 - t)
+});
+
+
       });
     });
   }
