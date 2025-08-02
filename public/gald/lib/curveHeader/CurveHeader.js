@@ -72,12 +72,14 @@ class CurveHeader {
     
     handlerEvent() {        
         window.addEventListener('resize', () => {
-            this.updatePath();           
+            this.updatePath();
+            this.setupParallaxImages();
             
         });
         window.addEventListener('scroll', () => {
             this.scrollY = window.scrollY || document.documentElement.scrollTop;
             this.updatePath(this.scrollY);
+            // this.setupParallaxImages();
         });
     }
 
@@ -166,14 +168,9 @@ class CurveHeader {
 
 
 
-
-
-
-
 setupParallaxImages(curveHeight) {
     const clipImages = document.querySelectorAll(".clipImg");
     const dancer = document.querySelectorAll(".dancer");
-    const rains = document.querySelectorAll(".rain");
     const jzled = document.querySelector(".jzled");
     const ww = window.innerWidth;
     const wh = window.innerHeight;
@@ -186,7 +183,7 @@ setupParallaxImages(curveHeight) {
     // Get the bounding box of the jzled element
     const jzledBBox = jzled.getBBox();
     const jzledWidth = jzledBBox.width;
-    const jzledX = parseFloat(jzled.getAttribute("x")) || 0;
+    const jzledCenterX = jzledBBox.x + jzledWidth / 2;
 
     // Initialize imageStates for parallax effect
     const imageStates = Array.from(clipImages).map((ele, index) => {
@@ -202,19 +199,14 @@ setupParallaxImages(curveHeight) {
 
     // Set dancer position
     dancer.forEach((item, index) => {
-        // Get SVG initial x and y
-        const initialX = parseFloat(item.getAttribute("x")) || 0;
-        const initialY = parseFloat(item.getAttribute("y")) || 0;
-
-        // Calculate random position within the jzled width
-        const minX = jzledX;
-        const maxX = jzledX + jzledWidth;
-        const randomX = minX + Math.random() * (maxX - minX);
+        // Calculate random position within the jzled width, centered around jzled's center
+        const randomOffsetX = (Math.random() - 0.5) * jzledWidth;
+        const randomX = jzledCenterX + randomOffsetX;
 
         // Y position remains the same as in the original code
         const minY = curveHeight - (dancer.length - index) * 300;
         const maxY = curveHeight / 5 + 527 * 0.6;
-        const yPos = Math.max(minY, maxY) + initialY;
+        const yPos = Math.max(minY, maxY);
 
         // Apply transform to ensure position is within the jzled width
         item.style.transform = `translate(${randomX}px, ${yPos}px)`;
@@ -238,6 +230,7 @@ setupParallaxImages(curveHeight) {
     if (now - this.lastSetupTime < this.cooldown) return;
     this.lastSetupTime = now;
 }
+
 
     
 
