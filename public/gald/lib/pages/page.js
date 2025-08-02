@@ -15,21 +15,22 @@ class PagesManager {
     this.logoScale();
   }
 
-  navToPage() {
+  navToPage() {   
+    
     this.navs.forEach((nav, index) => {
       nav.addEventListener("click", () => {
+      const viewboxHeight = window.CurveHeader?.sideHeight-300;
+      console.log("svgHeight:", viewboxHeight);
         this.pageList.forEach(page => page.classList.remove("pagedown"));
         this.pageList[index].classList.add("pagedown");
-
         
         const pageHeight = this.pageList[index].offsetHeight;
         this.pagesContainer.style.height = `${pageHeight}px`
         this.currentPage = this.pageList[index];
-
-lenis.scrollTo(550, {
-  duration: 1.2,
-  easing: (t) => t * (2 - t)
-});
+        lenis.scrollTo(viewboxHeight, {
+          duration: 1.2,
+          easing: (t) => t * (2 - t)
+        });
 
 
       });
@@ -75,7 +76,6 @@ lenis.scrollTo(550, {
       pageLogo.forEach(logo => {
         
         logo.style.height = `${logoHeight}px`;
-        console.log(logoHeight);
       });
     });
   }

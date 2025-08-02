@@ -48,6 +48,7 @@ class CurveHeader {
         this.curveData = "";
         this.currentImageIndex = 0;
         this.viewBoxHeight = 0;
+        this.sideHeight = 0;
         this.pathHeight = 0;
         this.scrollY = 0;
         this.isdown = isdown;
@@ -384,6 +385,7 @@ logoNavExpand() {
             middleHeight = sideHeight - middleOffset;
             curveHeight = middleHeight + curveOffset + limitY;
         }
+        this.sideHeight = sideHeight;
 
         this.curveHeight = curveHeight;
         const centerLeft = ww * 0.25;
@@ -391,6 +393,7 @@ logoNavExpand() {
         const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
         const headData = curveData + ` V 0 H 0 Z`;
         let viewboxHeight = Math.max(curveHeight, sideHeight) + 75;
+        this.viewboxHeight = viewboxHeight;
         // viewboxHeight = sideHeight + middleOffset + 50;
 
         this.titleInfo.style.height = `${curveHeight}px`;
@@ -423,17 +426,12 @@ logoNavExpand() {
         }
         
         this.initfun(ww, curveHeight);
-        
-
     }
 
     initfun(ww, curveHeight) {
         this.setupParallaxImages(curveHeight);
         this.girlCenter(ww, curveHeight);
-        this.setNavsOnPath();
-
-
-        
+        this.setNavsOnPath();       
 
     }
 
