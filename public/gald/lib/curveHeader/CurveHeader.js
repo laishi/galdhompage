@@ -165,79 +165,47 @@ class CurveHeader {
         }, 5000);
     }
 
+    setupParallaxImages() {
+        const clipImages = document.querySelectorAll(".clipImg");
+        const dancer = document.querySelectorAll(".dancer");
+        const jzled = document.querySelector(".jzled");
+        const ww = window.innerWidth;
+        const wh = window.innerHeight;    
+        
+        const jzledBBox = jzled.getBBox();
+        const jzledWidth = jzledBBox.width;
+        const jzledHeight = jzledBBox.height;
+        const jzledCenterX = jzledBBox.x + jzledWidth / 2;
+        jzled.style.transition = "";
+        jzled.setAttribute("x", (ww - jzledWidth) / 2);
+        jzled.setAttribute("y", (this.curveHeight-jzledHeight) / 2);    
+        
+        dancer.forEach((dance, index) => {
+            dance.style.transition = "";
+            const danceBBox = dance.getBBox();
+            const danceWidth = danceBBox.width;
+            const danceHeight = danceBBox.height;
+            const danceCenterX = danceBBox.x + jzledWidth / 2;
 
+            dance.setAttribute("x", (ww - danceWidth) / 2);
+            dance.setAttribute("y", (this.curveHeight-danceHeight));
+            const randomOffsetX = (Math.random() - 0.5) * jzledWidth;
+            const posy = Math.max((dancer.length-index) * (-this.curveHeight/2/dancer.length), -this.curveHeight/2+danceHeight*1.1)
+            dance.style.transform = `translate(${randomOffsetX}px, ${posy}px)`;        
 
-
-setupParallaxImages(curveHeight) {
-    const clipImages = document.querySelectorAll(".clipImg");
-    const dancer = document.querySelectorAll(".dancer");
-    const jzled = document.querySelector(".jzled");
-    const ww = window.innerWidth;
-    const wh = window.innerHeight;
-
-    // Set jzled position
-    jzled.style.transition = "";
-    jzled.setAttribute("x", (ww - 1225) / 2);
-    jzled.setAttribute("y", curveHeight / 5);
-
-    // Get the bounding box of the jzled element
-    const jzledBBox = jzled.getBBox();
-    const jzledWidth = jzledBBox.width;
-    const jzledCenterX = jzledBBox.x + jzledWidth / 2;
-
-    // Initialize imageStates for parallax effect
-    const imageStates = Array.from(clipImages).map((ele, index) => {
-        const x = parseFloat(ele.getAttribute("x")) || 0;
-        const y = parseFloat(ele.getAttribute("y")) || 0;
-        return {
-            ele,
-            sourceX: x,
-            sourceY: y,
-            scale: 0.01 * index
-        };
-    });
-
-    // Set dancer position
-    dancer.forEach((item, index) => {
-        // Calculate random position within the jzled width, centered around jzled's center
-        const randomOffsetX = (Math.random() - 0.5) * jzledWidth;
-        const randomX = jzledCenterX + randomOffsetX;
-
-        // Y position remains the same as in the original code
-        const minY = curveHeight - (dancer.length - index) * 300;
-        const maxY = curveHeight / 5 + 527 * 0.6;
-        const yPos = Math.max(minY, maxY);
-
-        // Apply transform to ensure position is within the jzled width
-        item.style.transform = `translate(${randomX}px, ${yPos}px)`;
-        item.style.opacity = 1;
-    });
-
-    // Parallax effect
-    window.addEventListener("mousemove", function(e) {
-        const offsetX = e.clientX - ww / 2;
-        const offsetY = e.clientY - wh / 2;
-        imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
-            const xpos = offsetX * scale;
-            const ypos = offsetY * scale * 0.01;
-            ele.setAttribute("x", sourceX + xpos);
-            ele.setAttribute("y", sourceY + ypos);
         });
-    });
 
-    // Cooldown logic
-    const now = Date.now();
-    if (now - this.lastSetupTime < this.cooldown) return;
-    this.lastSetupTime = now;
-}
-
-
-    
-
-
-
-
-
+        const imageStates = Array.from(clipImages).map((ele, index) => {
+            const x = parseFloat(ele.getAttribute("x")) || 0;
+            const y = parseFloat(ele.getAttribute("y")) || 0;
+            return {
+                ele,
+                sourceX: x,
+                sourceY: y,
+                scale: 0.01 * index
+            };
+        });
+    }
 
 
 
