@@ -3,6 +3,8 @@ class PagesManager {
     this.pages = document.querySelector(".pages");
     this.pageList = this.pages.querySelectorAll(".page");
     this.navs = document.querySelectorAll(".nav");
+    this.pageLogo = document.querySelectorAll(".pageLogo");
+
     this.currentPage = null;
     this.navState = {};
 
@@ -14,6 +16,8 @@ class PagesManager {
     this.logoScale();
     this.keywordAnimationCycle();
     this.hashScroll();
+
+    
   }
 
   hashScroll() {
@@ -26,6 +30,10 @@ class PagesManager {
   }
 
   navToPage() {
+    const logoWidth = this.pageLogo[0].offsetWidth;
+    const homePageHeight = this.pageList[0].offsetHeight + 250;
+    this.pages.style.height = `${homePageHeight}px`;
+
     this.navs.forEach((nav, index) => {
       nav.addEventListener("click", () => {
         const viewboxHeight = window.CurveHeader?.sideHeight - 300;
@@ -34,8 +42,8 @@ class PagesManager {
         this.pageList[index].classList.add("pagedown");
         this.logoScale();
         this.currentPage = this.pageList[index];
-        
-        const pageHeight = this.pageList[index].offsetHeight;
+       
+        const pageHeight = this.pageList[index].offsetHeight + 250;
         this.pages.style.height = `${pageHeight}px`;
 
         window.lenis.resize();
@@ -76,7 +84,7 @@ class PagesManager {
 
     window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
-      const logoHeight = Math.min(128, scrollY);
+      const logoHeight = Math.min(128, scrollY*2);
       logoImg.style.height = `${logoHeight}px`;
     });
   }

@@ -39,7 +39,6 @@ class ParticleText {
   
   init() {
     const sideHeight = window.CurveHeader?.sideHeight;
-    console.log(" particle sideHeight: ", sideHeight);
 
     this.ww = this.canvas.width = window.innerWidth;
     this.wh = this.canvas.height = sideHeight;

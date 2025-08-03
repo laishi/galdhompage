@@ -28,7 +28,7 @@
 
 .pages .pageLogo img {
   width: 168px;
-  height: 168px;
+  height: 0;
   opacity: 1;
   margin: 0 auto;
   transform-origin: top center;
