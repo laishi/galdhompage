@@ -78,7 +78,7 @@
 }
 
 .svgbox .headerbg .useHeaderbgPathMask {
-    fill: var(--menu-bg-floordark);
+    fill: var(--menu-bg-darker);
     opacity: 1;
     transition: opacity 3s ease;
 }
@@ -86,7 +86,8 @@
 
 .svgbox .headerbg .headerbgParallaxImages{
     display: block;
-    opacity: 1;
+    opacity: 0;
+    transition: opacity 5s ease;
 }
 
 

@@ -82,6 +82,15 @@ class CurveHeader {
         });
     }
 
+    headerMask() {
+        const galdParticle = document.querySelector(".galdParticle");
+        // const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
+        const maskList = [galdParticle];
+        maskList.forEach(mask => {
+            mask.style.opacity = 0;
+        });        
+    }
+
     lazyImg() {
         const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
         const jzledElement = document.querySelector(".clipImg.jzled");
@@ -91,8 +100,10 @@ class CurveHeader {
             const src = jzledElement.getAttribute("data-href");
             if (src) {
                 jzledElement.setAttribute("href", src);
-                jzledElement.addEventListener("load", () => {                    
+                jzledElement.addEventListener("load", () => {    
+                    this.headerbgParallaxImages.style.opacity = 0.5;                
                     setTimeout(() => {
+                        this.headerbgParallaxImages.style.opacity = 1;
                         this.headerMask();
                     }, 5000);
                 }, { once: true });
@@ -199,8 +210,18 @@ class CurveHeader {
                 scale: 0.01 * index
             };
         });
-    }
 
+        window.addEventListener("mousemove", function(e) {
+            const offsetX = e.clientX - ww / 2;
+            const offsetY = e.clientY - wh / 2;
+            imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
+                const xpos = offsetX * scale;
+                const ypos = offsetY * scale * 1;
+                ele.setAttribute("x", sourceX + xpos);
+                ele.setAttribute("y", sourceY + ypos);
+            });
+        });
+    }
 
 
     girlCenter(width, curveHeight) {
@@ -235,14 +256,6 @@ class CurveHeader {
         requestAnimationFrame(animate);
     }
 
-    headerMask() {
-        const galdParticle = document.querySelector(".galdParticle");
-        const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
-        const maskList = [galdParticle, useHeaderbgPathMask];
-        maskList.forEach(mask => {            
-            mask.style.opacity = 0;
-        });        
-    }
 
     logoNavExpand() {
         let animating = false;

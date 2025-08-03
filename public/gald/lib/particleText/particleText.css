@@ -2,11 +2,14 @@
 .galdParticle {
     position: absolute;
     top: 0;
-    opacity: 1;    
+    opacity: 1;
+    transition: opacity 3s ease;
+    pointer-events: none;
 }
 
 .galdParticle canvas {
     background: rgba(23, 104, 64, 0);
     width: 100vw;
     height: auto;
+    pointer-events: none;
 }
