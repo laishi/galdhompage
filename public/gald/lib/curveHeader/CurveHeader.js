@@ -92,7 +92,9 @@ class CurveHeader {
             if (src) {
                 jzledElement.setAttribute("href", src);
                 jzledElement.addEventListener("load", () => {                    
-                    this.headerMask(); // 在 jzled 加载完成后调用 headerMask
+                    setTimeout(() => {
+                        this.headerMask();
+                    }, 5000);
                 }, { once: true });
 
                 // 错误处理
