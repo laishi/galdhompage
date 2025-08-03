@@ -24,6 +24,7 @@ class ParticleText {
     this.radius = 1;
     
     // Configuration
+    this.text = options.text;
     this.colors = options.colors || ["#FFFFFF", "#FFFACD", "#FFFFE0", "#FFD700", "#FFECB3"];
     this.frictionRange = options.frictionRange || [0.94, 0.99];
     this.particleSizeRange = options.particleSizeRange || [2, 7];
@@ -58,9 +59,19 @@ class ParticleText {
   initScene() {
     
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.font = `bold ${this.ww / 10}px sans-serif`;
+
+    // 3. 设置文字样式（关键修改点）
+    const fontSize = Math.min(this.ww / 8, 250); // 限制最大100px
+    this.ctx.font = `bold ${fontSize}px "sans-serif`;
     this.ctx.textAlign = "center";
-    this.ctx.fillText("光爱照明设计", this.ww / 2, this.wh / 2);
+    this.ctx.textBaseline = "middle"; // 确保垂直居中
+    this.ctx.fillStyle = "#FFFFFF"; // 临时文字颜色（仅用于生成粒子）
+
+    // 4. 绘制文字（居中）
+    const text = this.text;
+    const centerX = this.ww / 2;
+    const centerY = this.wh / 2;
+    this.ctx.fillText(text, centerX, centerY);
     
     const data = this.ctx.getImageData(0, 0, this.ww, this.wh).data;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -104,7 +115,7 @@ class ParticleText {
     const b = particle.y - this.mouse.y;
     const distance = Math.sqrt(a * a + b * b);
     
-    if (distance < (this.radius * 70)) {
+    if (distance < (this.radius * 100)) {
       particle.accX = (particle.x - this.mouse.x) / 100;
       particle.accY = (particle.y - this.mouse.y) / 100;
       particle.vx += particle.accX;
@@ -148,8 +159,7 @@ class ParticleText {
 
 document.addEventListener("DOMContentLoaded", () => {
   const particleText = new ParticleText({
-    canvasSelector: "#particleText",
-    textInputSelector: "#particleCopy",
+    text: "光爱照明设计",
     colors: ["#FFFFFF", "#FFFACD", "#FFFFE0", "#FFD700", "#FFECB3"],
     frictionRange: [0.94, 0.99],
     particleSizeRange: [2, 5],
