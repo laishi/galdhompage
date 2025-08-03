@@ -114,7 +114,7 @@ handlerEvent() {
                     setTimeout(() => {
                         this.headerbgParallaxImages.style.opacity = 1;
                         this.headerMask();
-                    }, 10000);
+                    }, 1000);
                 }, { once: true });
 
                 // 错误处理

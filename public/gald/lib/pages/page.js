@@ -8,7 +8,14 @@ class PagesManager {
     this.currentPage = null;
     this.navState = {};
 
+    this.handleEvent();
     this.init();
+  }
+
+  handleEvent() {
+    window.addEventListener("resize", () => {
+      this.setPagesHeight();
+    })
   }
 
   init() {
@@ -29,10 +36,17 @@ class PagesManager {
     }
   }
 
-  navToPage() {
-    const logoWidth = this.pageLogo[0].offsetWidth;
+  setPagesHeight() {
     const homePageHeight = this.pageList[0].offsetHeight + 250;
     this.pages.style.height = `${homePageHeight}px`;
+    if (this.currentPage) {
+      const currentPageHeight = this.currentPageHeight.offsetHeight + 250;
+      this.pages.style.height = `${currentPageHeight}px`;      
+    }
+
+  }
+
+  navToPage() {
 
     this.navs.forEach((nav, index) => {
       nav.addEventListener("click", () => {
