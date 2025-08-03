@@ -55,6 +55,8 @@ class PagesManager {
       nav.addEventListener("click", () => {
         
         const viewboxHeight = window.CurveHeader?.sideHeight-300;
+        console.log("page viewboxHeight: ", viewboxHeight+300);
+        
         this.pageList.forEach(page => page.classList.remove("pagedown"));
         this.pageList[index].classList.add("pagedown");
         

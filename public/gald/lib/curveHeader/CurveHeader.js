@@ -47,7 +47,7 @@ class CurveHeader {
         this.curveLength = 0;
         this.curveData = "";
         this.currentImageIndex = 0;
-        this.viewBoxHeight = 0;
+        this.viewBoxHeight = 500;
         this.sideHeight = 0;
         this.pathHeight = 0;
         this.scrollY = 0;
@@ -93,7 +93,6 @@ class CurveHeader {
                 jzledElement.setAttribute("href", src);
                 jzledElement.addEventListener("load", () => {                    
                     this.headerMask(); // 在 jzled 加载完成后调用 headerMask
-                    this.updatePath(); // 确保剪裁路径同步更新
                 }, { once: true });
 
                 // 错误处理
@@ -235,44 +234,48 @@ class CurveHeader {
     }
 
     headerMask() {
+        const galdParticle = document.querySelector(".galdParticle");
         const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
-        useHeaderbgPathMask.style.opacity = 0;
+        const maskList = [galdParticle, useHeaderbgPathMask];
+        maskList.forEach(mask => {            
+            mask.style.opacity = 0;
+        });        
     }
 
-logoNavExpand() {
-    let animating = false;
-    let animated = false;
+    logoNavExpand() {
+        let animating = false;
+        let animated = false;
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 0) {
-            animated = false;
-        }
-    });
-
-    const setupMouseoverAnimate = (element) => {
-        element.addEventListener("mouseover", () => {
-            if (window.scrollY !== 0 || animating || animated) return;
-            animating = true;
-            let space = 0;
-
-            const animate = () => {
-                if (space < 120) {
-                    space += 10;
-                    this.setNavsOnPath(space);
-                    requestAnimationFrame(animate);
-                } else {
-                    animating = false;
-                    animated = true;
-                }
-            };
-
-            requestAnimationFrame(animate);
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 0) {
+                animated = false;
+            }
         });
-    };
 
-    setupMouseoverAnimate(this.navLogo);
-    setupMouseoverAnimate(this.headerShape);
-}
+        const setupMouseoverAnimate = (element) => {
+            element.addEventListener("mouseover", () => {
+                if (window.scrollY !== 0 || animating || animated) return;
+                animating = true;
+                let space = 0;
+
+                const animate = () => {
+                    if (space < 120) {
+                        space += 10;
+                        this.setNavsOnPath(space);
+                        requestAnimationFrame(animate);
+                    } else {
+                        animating = false;
+                        animated = true;
+                    }
+                };
+
+                requestAnimationFrame(animate);
+            });
+        };
+
+        setupMouseoverAnimate(this.navLogo);
+        setupMouseoverAnimate(this.headerShape);
+    }
 
 
     setNavsOnPath(navSpace = 0) {

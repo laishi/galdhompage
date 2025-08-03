@@ -2,62 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Star Animation</title>
-  <style>
-    body {
-      margin: 0;
-      background: radial-gradient(200% 100% at bottom center, #f7f7b6, #e96f9e, #1b2947);
-      background: radial-gradient(220% 105% at top center, #1b2947 10%, #75517d 40%, #e96f92 65%, #f7f7b6);
-      background-attachment: fixed;
-      overflow: hidden;
-      height: 100vh;
-    }
-    .stars {
-      transform: perspective(500px);
-      transform-style: preserve-3d;
-      position: absolute;
-      perspective-origin: 50% 100%;
-      left: 50%;
-      bottom: 0;
-      animation: rotate 90s infinite linear;
-    }
-    .star {
-      width: 2px;
-      height: 2px;
-      background: #f7f7b8;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      backface-visibility: hidden;
-    }
-    @keyframes rotate {
-      0% {
-        transform: perspective(400px) rotate(20deg) rotateX(-40deg) rotateY(0);
-      }
-      100% {
-        transform: perspective(400px) rotate(20deg) rotateX(-40deg) rotateY(-360deg);
-      }
-    }
-  </style>
+  <title>Text to particles</title>
+  <link rel="stylesheet" href="/public/gald/lib/particleText/particleText.css">
 </head>
 <body>
-  <div class="stars"></div>
-  <script>
-    let stars = document.querySelector('.stars');
-    let starsCount = 800;
-    let distance = 800;
-
-    for (let i = 0; i < starsCount; i++) {
-      let star = document.createElement('div');
-      let speed = 0.2 + (Math.random() * 1);
-      let thisDistance = distance + (Math.random() * 300);
-      star.classList.add('star');
-      star.style.transformOrigin = `0 0 ${thisDistance}px`;
-      star.style.transform = `translate3d(0, 0, -${thisDistance}px) rotateY(${(Math.random() * 360)}deg) rotateX(${(Math.random() * -50)}deg) scale(${speed}, ${speed})`;
-      stars.appendChild(star);
-    }
-  </script>
+  <div class="galdTitle">
+    <canvas id="particleText"></canvas>
+    <input id="particleCopy" type="text" value="光爱照明设计" />
+    <p>Click anywhere to change the radius of your mouse</p>
+  </div>
+  <script src="/public/gald/lib/particleText/particleText.js"></script>
 </body>
 </html>
