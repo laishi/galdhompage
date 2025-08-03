@@ -1,7 +1,7 @@
 class PagesManager {
-  constructor(selector = ".pages") {
-    this.pagesContainer = document.querySelector(selector);
-    this.pageList = this.pagesContainer.querySelectorAll(".page");
+  constructor() {
+    this.pages = document.querySelector(".pages");
+    this.pageList = this.pages.querySelectorAll(".page");
     this.navs = document.querySelectorAll(".nav");
     this.currentPage = null;
     this.navState = {};
@@ -36,16 +36,15 @@ class PagesManager {
         this.currentPage = this.pageList[index];
         
         const pageHeight = this.pageList[index].offsetHeight;
-        this.pagesContainer.style.height = `${pageHeight}px`;
+        this.pages.style.height = `${pageHeight}px`;
+
         window.lenis.resize();
         window.lenis.scrollTo(viewboxHeight, {
           duration: 1.2,
           easing: t => t * (2 - t)
         });
 
-
         this.keywordAnimationCycle();
-
         this.navState = {
           index: index,
           navName: nav.className,
@@ -57,7 +56,7 @@ class PagesManager {
   }
 
   keywordAnimationCycle() {
-    const pagedown = this.pagesContainer.querySelector(".pagedown");
+    const pagedown = this.pages.querySelector(".pagedown");
     const links = pagedown.querySelectorAll(".keywordsBtn a");
 
     let currentIndex = 0;
@@ -70,11 +69,10 @@ class PagesManager {
   }
 
   logoScale() {
-    const pagedown = this.pagesContainer.querySelector(".pagedown");
+    const pagedown = this.pages.querySelector(".pagedown");
+    if (!pagedown) return;
     const logoImg = pagedown.querySelector(".pageLogo img");
     if (!logoImg) return;
-
-    const logoImgHeight = logoImg.offsetHeight;
 
     window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
