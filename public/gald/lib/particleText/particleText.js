@@ -163,6 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
     colors: ["#FFFFFF", "#FFFACD", "#FFFFE0", "#FFD700", "#FFECB3"],
     frictionRange: [0.94, 0.99],
     particleSizeRange: [2, 5],
-    particleDensity: 200
+    particleDensity: 150
   });
 });

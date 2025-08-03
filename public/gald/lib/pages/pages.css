@@ -1,9 +1,9 @@
-/* === 页面容器 === */
 :root {
   --keyworlds-width: 50em;
   --keyworlds-height: 50em;
   --keyworlds-color: var(--background-color);
 }
+
 .pages {
   position: relative;
   width: 100%;
@@ -13,16 +13,40 @@
   align-items: center;
   z-index: 0;
   color: var(--menu-bg-lighter);
+  /* background-color: aquamarine; */
 }
 
 .pages .pageLogo {
   width: 168px;
-  height: 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   opacity: 1;
   margin: 0 auto;
 }
 
-.pages .page{
+.pages .pageLogo img {
+  width: 100%;
+  height: 0;
+  opacity: 1;
+  margin: 0 auto;
+  transform-origin: top center;
+  transform: scale(1);
+  cursor: pointer;
+  will-change: transform, opacity;
+}
+
+.pages .pageLogo h3 {
+  font-size: 2em;
+  text-align: center;
+  opacity: 1;
+  margin: 0 auto;
+  margin-top: 0.25em;
+}
+
+.pages .page {
   position: absolute;
   top: 0;
   width: 80%;
@@ -33,9 +57,10 @@
   justify-content: center;
   align-items: center;
   z-index: 0;
-  opacity:0;
+  opacity: 0;
   transform: translateY(-100%);
   transition: transform 1s ease, opacity 0.1s ease;
+  will-change: transform, opacity;
 }
 
 .pages .pagedown {
@@ -45,8 +70,7 @@
   opacity: 1;
 }
 
-
-.pages .page .pageTitle{
+.pages .page .pageTitle {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -55,50 +79,40 @@
   text-align: center;
 }
 
-.pages .page .pageTitle img{
+.pages .page .pageTitle img {
   transition: transform 0.3s ease;
+  will-change: transform;
 }
 
-.pages .page .pageTitle img:hover{
+.pages .page .pageTitle img:hover {
   cursor: pointer;
-  transform: scale(0.8);
+  transform: scale(1.05);
 }
 
-.pages .page .pageContent{
+.pages .page .pageContent {
   color: rgba(240, 248, 255, 0.5);
-  margin: 2.5em auto;
-  /* background-color: rgb(6, 61, 43); */
+  margin: 0 auto;
+  margin-bottom: 2.5em;
 }
 
-.pages .page .pageContent .aboutIcon{
+.pages .page .pageContent .aboutIcon {
   color: rgba(240, 248, 255, 0.5);
 }
 
-
-
-
-.pages .page .pageContent .galdIntri p{
+.pages .page .pageContent .galdIntri p {
   line-height: 2em;
   font-size: 1.2em;
   color: rgba(240, 248, 255, 0.5);
 }
 
-
-.pages .page .pageTitle h3{
-  width: 100%;
-  font-size: 32px;
-  margin-bottom: 2.5em;
-}
-
-.pages .page .pageTitle p{
+.pages .page .pageTitle p {
   font-size: 1.5em;
   color: aliceblue;
   line-height: 2em;
 }
 
-.pages .page .aboutIcon span{
+.pages .page .aboutIcon span {
   font-size: 1.2em;
-  /* color: aliceblue; */
   line-height: 2em;
 }
 
@@ -111,7 +125,7 @@
   justify-content: center;
   align-items: center;
   gap: 1em;
-  /* background-color: rgb(78, 58, 33); */
+  margin: 2.5em auto;
 }
 
 .keywordsBtn a {
@@ -119,8 +133,8 @@
   width: 100%;
   height: 100%;
   min-width: 250px;
-  max-width: calc(100%/6 - 1em);
-  flex: 1 1 calc(100%/6 - 1em);
+  max-width: calc(100% / 6 - 1em);
+  flex: 1 1 calc(100% / 6 - 1em);
   text-decoration: none;
   text-align: center;
   display: inline-block;
@@ -134,6 +148,7 @@
   overflow: hidden;
   opacity: 0.3;
   transition: opacity 0.3s ease;
+  will-change: opacity;
 }
 
 .keywordsBtn a:before {
@@ -148,10 +163,11 @@
   transform: rotate(0deg);
 }
 
-/* 旋转动画类，仅在某个 a 元素上动态添加 */
 .keywordsBtn a.animate-border:before {
   animation: 5s keywordsAnimation linear infinite;
+  will-change: transform;
 }
+
 .keywordsBtn a.animate-border {
   opacity: 1;
 }
@@ -169,10 +185,7 @@
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
 }
-
-

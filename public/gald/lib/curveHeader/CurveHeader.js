@@ -70,17 +70,26 @@ class CurveHeader {
         this.handlerEvent()
     }
     
-    handlerEvent() {        
-        window.addEventListener('resize', () => {
-            this.updatePath();
-            this.setupParallaxImages();
-            
-        });
-        window.addEventListener('scroll', () => {
-            this.scrollY = window.scrollY || document.documentElement.scrollTop;
-            this.updatePath(this.scrollY);
-        });
-    }
+handlerEvent() {
+    window.addEventListener('resize', () => {
+        this.updatePath();
+        this.setupParallaxImages();
+    });
+
+    let isTicking = false;
+    window.addEventListener('scroll', () => {
+        this.scrollY = window.scrollY || document.documentElement.scrollTop;
+        if (!isTicking) {
+            window.requestAnimationFrame(() => {
+                // 确保在 requestAnimationFrame 回调中执行的操作尽可能轻量
+                this.updatePath(this.scrollY);
+                isTicking = false;
+            });
+            isTicking = true;
+        }
+    });
+}
+
 
     headerMask() {
         const galdParticle = document.querySelector(".galdParticle");
@@ -367,66 +376,64 @@ class CurveHeader {
         });
     }
 
-    updatePath(yScroll = 0) {
-        const ww = window.innerWidth;
-        const wh = window.innerHeight;
-        const curveOffset = 25;
-        const middleOffset = Math.max(150, ww / 10);
-        const svgboxOffsetTop = this.svgbox.offsetTop;
-        const relativeScroll = Math.max(0, yScroll - svgboxOffsetTop);
-        let limitY = Math.min((middleOffset - curveOffset) * 2, relativeScroll);
-        let middleHeight = wh * (this.config.svgHeight / 100);
-        let sideHeight = middleHeight - middleOffset;
-        let curveHeight = middleHeight - curveOffset - limitY;
+updatePath(yScroll = 0) {
+    // 简化计算和 DOM 操作
+    const ww = window.innerWidth;
+    const wh = window.innerHeight;
+    const curveOffset = 25;
+    const middleOffset = Math.max(150, ww / 10);
+    const svgboxOffsetTop = this.svgbox.offsetTop;
+    const relativeScroll = Math.max(0, yScroll - svgboxOffsetTop);
+    let limitY = Math.min((middleOffset - curveOffset) * 2, relativeScroll);
+    let middleHeight = wh * (this.config.svgHeight / 100);
+    let sideHeight = middleHeight - middleOffset;
+    let curveHeight = middleHeight - curveOffset - limitY;
 
-        if (!this.config.isdown) {
-            sideHeight = middleHeight;
-            middleHeight = sideHeight - middleOffset;
-            curveHeight = middleHeight + curveOffset + limitY;
-        }
-        this.sideHeight = sideHeight;
-
-        this.curveHeight = curveHeight;
-        const centerLeft = ww * 0.25;
-        const centerRight = ww - centerLeft;
-        const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
-        const headData = curveData + ` V 0 H 0 Z`;
-        let viewboxHeight = Math.max(curveHeight, sideHeight) + 75;
-        this.viewboxHeight = viewboxHeight;
-        // viewboxHeight = sideHeight + middleOffset + 50;
-
-        this.titleInfo.style.height = `${curveHeight}px`;
-        this.svgbox.style.height = `${viewboxHeight}px`;
-        this.headerbg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
-        this.headerbgPath.setAttribute("d", headData);
-        this.headerfg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
-        this.headerPath.setAttribute("d", headData);
-        this.curvePath.setAttribute("d", curveData);
-
-        const baseOffset = 10;
-        let shapTopOffset = curveHeight - curveOffset;
-        let shapBottomOffset = curveHeight + curveOffset;
-        let baseTopHeight = sideHeight - baseOffset / 2;
-        let baseBottomHeight = sideHeight + baseOffset / 2;
-        const shapTop = `M 0,${baseTopHeight} Q ${centerLeft},${shapTopOffset} ${ww / 2},${shapTopOffset} Q ${centerRight},${shapTopOffset} ${ww},${baseTopHeight} v ${baseOffset}`;
-        const shapBottom = ` Q ${centerRight},${shapBottomOffset} ${ww / 2},${shapBottomOffset} Q ${centerLeft},${shapBottomOffset} 0,${baseBottomHeight} Z`;
-        const curveOffsetData = shapTop + " " + shapBottom;
-        this.headerShape.setAttribute("d", curveOffsetData);
-        this.curveData = curveData;
-        this.curveLength = this.curvePath.getTotalLength();
-
-        
-        
-        if (Math.abs(curveHeight - sideHeight) > 50) {
-            this.subTitle.style.top = `${sideHeight - 50}px`;
-            this.subTitle.style.opacity = 1;
-        } else {
-            this.subTitle.style.opacity = 0;
-        }
-        
-        this.initfun(ww, curveHeight);
+    if (!this.config.isdown) {
+        sideHeight = middleHeight;
+        middleHeight = sideHeight - middleOffset;
+        curveHeight = middleHeight + curveOffset + limitY;
     }
 
+    this.sideHeight = sideHeight;
+    this.curveHeight = curveHeight;
+
+    const centerLeft = ww * 0.25;
+    const centerRight = ww - centerLeft;
+    const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
+    const headData = curveData + ` V 0 H 0 Z`;
+    let viewboxHeight = Math.max(curveHeight, sideHeight) + 60;
+
+    this.viewboxHeight = viewboxHeight;
+    this.titleInfo.style.height = `${curveHeight}px`;
+    this.svgbox.style.height = `${viewboxHeight}px`;
+    this.headerbg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
+    this.headerbgPath.setAttribute("d", headData);
+    this.headerfg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
+    this.headerPath.setAttribute("d", headData);
+    this.curvePath.setAttribute("d", curveData);
+
+    const baseOffset = 10;
+    let shapTopOffset = curveHeight - curveOffset;
+    let shapBottomOffset = curveHeight + curveOffset;
+    let baseTopHeight = sideHeight - baseOffset / 2;
+    let baseBottomHeight = sideHeight + baseOffset / 2;
+    const shapTop = `M 0,${baseTopHeight} Q ${centerLeft},${shapTopOffset} ${ww / 2},${shapTopOffset} Q ${centerRight},${shapTopOffset} ${ww},${baseTopHeight} v ${baseOffset}`;
+    const shapBottom = ` Q ${centerRight},${shapBottomOffset} ${ww / 2},${shapBottomOffset} Q ${centerLeft},${shapBottomOffset} 0,${baseBottomHeight} Z`;
+    const curveOffsetData = shapTop + " " + shapBottom;
+    this.headerShape.setAttribute("d", curveOffsetData);
+    this.curveData = curveData;
+    this.curveLength = this.curvePath.getTotalLength();
+
+    if (Math.abs(curveHeight - sideHeight) > 50) {
+        this.subTitle.style.top = `${sideHeight - 50}px`;
+        this.subTitle.style.opacity = 1;
+    } else {
+        this.subTitle.style.opacity = 0;
+    }
+
+    this.initfun(ww, curveHeight);
+}
     initfun(ww, curveHeight) {
         this.setupParallaxImages(curveHeight);
         this.girlCenter(ww, curveHeight);
