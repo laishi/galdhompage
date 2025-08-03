@@ -101,7 +101,7 @@ class CurveHeader {
             if (src) {
                 jzledElement.setAttribute("href", src);
                 jzledElement.addEventListener("load", () => {    
-                    this.headerbgParallaxImages.style.opacity = 0.5;                
+                    this.headerbgParallaxImages.style.opacity = 0.3;                
                     setTimeout(() => {
                         this.headerbgParallaxImages.style.opacity = 1;
                         this.headerMask();
