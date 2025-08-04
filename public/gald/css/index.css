@@ -1,8 +1,22 @@
 /* === 基础样式 === */
 
 :root {
-  --background-color: rgb(24, 24, 32);
-  --page-bgimg: url(/public/gald/img/backgrounds/bg-subtle-1-dark-800w.jpg);
+    --hue: 0;
+    --saturation: 72%;
+    --lightness: 40%;
+    --menu-bg: hsl(var(--hue), var(--saturation), var(--lightness));
+    --menu-bg-lighter: hsl(var(--hue), var(--saturation), 50%);
+    --menu-bg-darker: hsl(var(--hue), var(--saturation), 20%);
+    --menu-bg-verydark: hsl(var(--hue), var(--saturation), 10%);
+    --menu-bg-floordark: hsl(var(--hue), var(--saturation), 5%);
+    --header-stroke: 5px;
+    --nav-color: rgba(255, 255, 255, 0.7);
+    --background-color: rgb(24, 24, 32);
+    --page-bgimg: url(/public/gald/img/backgrounds/bg-subtle-1-dark-800w.jpg);
+
+    --text-white: aliceblue;
+    --text-gray: rgb(150, 150, 150);
+    --text-black: rgb(38, 38, 38);
 }
 
 

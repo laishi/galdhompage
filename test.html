@@ -1,263 +1,234 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>灯光效果展示</title>
-    <style>
-        /* CSS Document */
-        * {
-            padding: 0px;
-            margin: 0px;
-        }
-        html, body {
-            background: #000;
-            width: 100%;
-            height: 100%;
-        }
-        .auroraLights {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            margin: 0 auto 0 auto;
-            overflow: hidden;
-        }
-        .auroraLights .lightings {
-            bottom: -60px;
-            position: absolute;
-            width: 100%;
-        }
-        .auroraLights .light-layer {
-            /*border-radius*/
-            -webkit-border-radius: 50%;
-            -moz-border-radius: 50%;
-            border-radius: 50%;
-            height: 20px;
-            width: 100%;
-            position: relative;
-            margin: auto;
-        }
-        .auroraLights .light-one {
-            /*animation*/
-            -webkit-animation: one 5s ease-in-out infinite alternate;
-            -moz-animation: one 5s ease-in-out infinite alternate;
-            -ms-animation: one 5s ease-in-out infinite alternate;
-            -o-animation: one 5s ease-in-out infinite alternate;
-            animation: one 5s ease-in-out infinite alternate;
-        }
-        @-webkit-keyframes one {
-            from {
-                -webkit-box-shadow: 0 0 250px 20px #473C78;
-            }
-            to {
-                -webkit-box-shadow: 0 0 100px 15px #F72A3B;
-            }
-        }
-        @-moz-keyframes one {
-            from {
-                -moz-box-shadow: 0 0 250px 20px #473C78;
-            }
-            to {
-                -moz-box-shadow: 0 0 100px 15px #F72A3B;
-            }
-        }
-        @-o-keyframes one {
-            from {
-                -o-box-shadow: 0 0 250px 20px #473C78;
-            }
-            to {
-                -o-box-shadow: 0 0 100px 15px #F72A3B;
-            }
-        }
-        @keyframes one {
-            from {
-                box-shadow: 0 0 250px 20px #473C78;
-            }
-            to {
-                box-shadow: 0 0 100px 15px #F72A3B;
-            }
-        }
-        .auroraLights .light-two {
-            width: 90%;
-            /*animation*/
-            -webkit-animation: two 4s ease-in-out infinite alternate;
-            -moz-animation: two 4s ease-in-out infinite alternate;
-            -ms-animation: two 4s ease-in-out infinite alternate;
-            -o-animation: two 4s ease-in-out infinite alternate;
-            animation: two 4s ease-in-out infinite alternate;
-        }
-        @-webkit-keyframes two {
-            from {
-                -webkit-box-shadow: 0 0 250px 20px #18C499;
-            }
-            to {
-                -webkit-box-shadow: 0 0 100px 15px #D8F05E;
-            }
-        }
-        @-moz-keyframes two {
-            from {
-                -moz-box-shadow: 0 0 250px 20px #18C499;
-            }
-            to {
-                -moz-box-shadow: 0 0 100px 15px #D8F05E;
-            }
-        }
-        @-o-keyframes two {
-            from {
-                -o-box-shadow: 0 0 250px 20px #18C499;
-            }
-            to {
-                -o-box-shadow: 0 0 100px 15px #D8F05E;
-            }
-        }
-        @keyframes two {
-            from {
-                box-shadow: 0 0 250px 20px #18C499;
-            }
-            to {
-                box-shadow: 0 0 100px 15px #D8F05E;
-            }
-        }
-        .auroraLights .light-three {
-            width: 80%;
-            /*animation*/
-            -webkit-animation: three 3s ease-in-out infinite alternate;
-            -moz-animation: three 3s ease-in-out infinite alternate;
-            -ms-animation: three 3s ease-in-out infinite alternate;
-            -o-animation: three 3s ease-in-out infinite alternate;
-            animation: three 3s ease-in-out infinite alternate;
-        }
-        @-webkit-keyframes three {
-            from {
-                -webkit-box-shadow: 0 0 250px 20px #FFDD00;
-            }
-            to {
-                -webkit-box-shadow: 0 0 100px 15px #3E33FF;
-            }
-        }
-        @-moz-keyframes three {
-            from {
-                -moz-box-shadow: 0 0 250px 20px #FFDD00;
-            }
-            to {
-                -moz-box-shadow: 0 0 100px 15px #3E33FF;
-            }
-        }
-        @-o-keyframes three {
-            from {
-                -o-box-shadow: 0 0 250px 20px #FFDD00;
-            }
-            to {
-                -o-box-shadow: 0 0 100px 15px #3E33FF;
-            }
-        }
-        @keyframes three {
-            from {
-                box-shadow: 0 0 250px 20px #FFDD00;
-            }
-            to {
-                box-shadow: 0 0 100px 15px #3E33FF;
-            }
-        }
-        .auroraLights .light-four {
-            width: 70%;
-            /*animation*/
-            -webkit-animation: four 2s ease-in-out infinite alternate;
-            -moz-animation: four 2s ease-in-out infinite alternate;
-            -ms-animation: four 2s ease-in-out infinite alternate;
-            -o-animation: four 2s ease-in-out infinite alternate;
-            animation: four 2s ease-in-out infinite alternate;
-        }
-        @-webkit-keyframes four {
-            from {
-                -webkit-box-shadow: 0 0 250px 20px #781848;
-            }
-            to {
-                -webkit-box-shadow: 0 0 100px 15px #F2BBE9;
-            }
-        }
-        @-moz-keyframes four {
-            from {
-                -moz-box-shadow: 0 0 250px 20px #781848;
-            }
-            to {
-                -moz-box-shadow: 0 0 100px 15px #F2BBE9;
-            }
-        }
-        @-o-keyframes four {
-            from {
-                -o-box-shadow: 0 0 250px 20px #781848;
-            }
-            to {
-                -o-box-shadow: 0 0 100px 15px #F2BBE9;
-            }
-        }
-        @keyframes four {
-            from {
-                box-shadow: 0 0 250px 20px #781848;
-            }
-            to {
-                box-shadow: 0 0 100px 15px #F2BBE9;
-            }
-        }
-        .auroraLights .light-five {
-            width: 60%;
-            /*animation*/
-            -webkit-animation: five 1s ease-in-out infinite alternate;
-            -moz-animation: five 1s ease-in-out infinite alternate;
-            -ms-animation: five 1s ease-in-out infinite alternate;
-            -o-animation: five 1s ease-in-out infinite alternate;
-            animation: five 1s ease-in-out infinite alternate;
-        }
-        @-webkit-keyframes five {
-            from {
-                -webkit-box-shadow: 0 0 250px 20px #42F2A1;
-            }
-            to {
-                -webkit-box-shadow: 0 0 100px 15px #F4F6AD;
-            }
-        }
-        @-moz-keyframes five {
-            from {
-                -moz-box-shadow: 0 0 250px 20px #42F2A1;
-            }
-            to {
-                -moz-box-shadow: 0 0 100px 15px #F4F6AD;
-            }
-        }
-        @-o-keyframes five {
-            from {
-                -o-box-shadow: 0 0 250px 20px #42F2A1;
-            }
-            to {
-                -o-box-shadow: 0 0 100px 15px #F4F6AD;
-            }
-        }
-        @keyframes five {
-            from {
-                box-shadow: 0 0 250px 20px #42F2A1;
-            }
-            to {
-                box-shadow: 0 0 100px 15px #F4F6AD;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Super Slinky</title>
+  <link href='https://fonts.googleapis.com/css?family=PT+Sans:700|PT+Serif' rel='stylesheet' type='text/css'>
+  <style>
+    html, body, .vcent {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      font-family: "PT Serif", serif;
+      color: #333;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    article {
+      position: relative;
+    }
+    section {
+      width: 480px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    section h1 {
+      position: relative;
+      height: 42px;
+      width: 480px;
+      box-sizing: border-box;
+      margin: 0;
+      padding-left: 1em;
+      font: 16px/42px "PT Sans", sans-serif;
+      background: skyblue;
+      cursor: pointer;
+    }
+    section h1 .progress {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    section h1 .text {
+      position: relative;
+    }
+    section p {
+      margin-left: 18px;
+      margin-right: 18px;
+      line-height: 1.46em;
+      font-size: 16px;
+      text-align: justify;
+    }
+    footer {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+      font-size: 36px;
+      color: #eee;
+      background: #333;
+    }
+    footer a {
+      color: #eee;
+    }
+    .vcent, .container {
+      vertical-align: middle;
+      display: inline-block;
+    }
+    .container {
+      width: 60%;
+      text-align: justified;
+    }
+  </style>
 </head>
 <body>
-    <div class="auroraLights">
-        <div class="lightings">
-            <section class="light-layer light-one">
-                <section class="light-layer light-two">
-                    <section class="light-layer light-three">
-                        <section class="light-layer light-four">
-                            <section class="light-layer light-five">
-                                <!-- 内容可以在这里添加 -->
-                            </section>
-                        </section>
-                    </section>
-                </section>
-            </section>
-        </div>
+  <article>
+    <section>
+      <h1>Intro: Salads That Sizzle</h1>
+      <p>I have two young, very active boys, so summer means spending our days outside in the yard and cooking our meals on the grill as often as possible. We grill everything—including salads, which are a delicious surprise. A quick turn on the grill gives salad greens caramelized edges, while their interior leaves remain crisp-tender. Their flavor gets concentrated and infused with smokiness, making for salads that are complex and satisfying. For summer dinner parties they’re ideal—unexpected, visually appealing, and tasty—but they’re also easy enough for weeknights.</p>
+    </section>
+    <section>
+      <h1>Step One: Start With Hearty Greens</h1>
+      <p>Making a great grilled salad begins with choosing the right greens. Delicate ones like arugula, watercress, or mizuna don’t work. Instead, you need greens with thick leaves that won’t wilt too quickly, turn slimy, or burn to a crisp. You should also use greens with a sturdy core, so you can cut a head into halves or wedges and have the leaves stay together on the grill.</p>
+    </section>
+    <section>
+      <h1>Step Two: Bring on the Romaine</h1>
+      <p>Substantial and slightly bitter greens in the romaine and chicory families are perfect for the grill. I like to pair them with bright, tangy dressings, like a lemony Caesar or a summery fines herbes salsa verde. Another of my favorites to grill is iceberg lettuce because it forms such sturdy, attractive wedges. As a milder lettuce, it benefits from stronger flavors like bacon and blue cheese, which make for a great update on the classic steakhouse iceberg wedge salad. These three salads work because they’re simple, with just enough bold flavors to highlight the delicious smokiness of the grilled greens.</p>
+    </section>
+    <section>
+      <h1>Step Three: Grill Fast and Hot</h1>
+      <p>Once you’ve settled on what to grill, the how to grill part is pretty straightforward. Place the greens over medium-hot direct heat and leave them alone just long enough for them to develop grill marks. Be sure your fire is the right temperature: too hot and the greens will burn; not hot enough and they will wilt and become slimy.</p>
+    </section>
+    <section>
+      <h1>Conclusion: More Tips</h1>
+      <p>There are a few more things to keep in mind when grilling greens. They absorb other flavors very easily, so always clean the grill grate well or your salad may end up tasting like what you grilled the day before. If you’re using charcoal, avoid lighter fluid and lighter-fluid-infused charcoal briquettes, which can impart a chemical taste. It’s also important to have your dressing and toppings prepared before you put the greens on the grill—these salads are best served immediately, and they can be ready faster than it takes the family to come in from the yard.</p>
+    </section>
+  </article>
+  <footer>
+    <div class="vcent"></div>
+    <div class="container">
+      <p>Brought to you by <a href="http://rileyjshaw.com" target="_blank">rileyjshaw</a> with heavy inspiration from <a href="http://slinky.iclanzan.com/" target="_blank">slinky.js</a>. Recipe from <a href="http://www.finecooking.com/articles/salads-that-sizzle.aspx" target="_blank">finecooking.com</a>.</p>
     </div>
+  </footer>
+  <script>
+    !function () {
+      function getTop(element) {
+        var top = 0;
+        do {
+          top += element.offsetTop || 0;
+          element = element.offsetParent;
+        } while (element);
+        return top;
+      }
+
+      function smoothScroll(top) {
+        var windowTop = window.pageYOffset;
+        if (top !== windowTop) {
+          var direction = top - windowTop > 0 ? 1 : -1;
+          function scroll() {
+            var diff = (top - windowTop) * direction;
+            if (diff > 0) {
+              windowTop += Math.min(diff, 30) * direction;
+              window.scrollTo(0, windowTop);
+              window.requestAnimationFrame(scroll);
+            }
+          }
+          window.requestAnimationFrame(scroll);
+        }
+      }
+
+      function initSections(section, i) {
+        if (section.el) {
+          section.top = getTop(section.el);
+          section.height = section.el.offsetHeight;
+          section.header.onclick = function () { smoothScroll(section.top - topLatch); };
+          section.fixed = false;
+          section.el.style.cssText = section.header.style.cssText = '';
+          return section;
+        }
+        var h1 = section.querySelector('h1');
+        var progress;
+        var height = section.offsetHeight;
+        var topLatch = i * 42;
+        var top = getTop(section);
+
+        h1.innerHTML = '<span class="progress"></span><span class="text">' + h1.textContent + '</span>';
+        progress = h1.querySelector('.progress');
+        h1.onclick = function () { smoothScroll(top - topLatch); };
+
+        return {
+          el: section,
+          header: h1,
+          progress: progress,
+          top: top,
+          height: height,
+          topLatch: topLatch,
+          bottomLatch: (sections.length - 1 - i) * 42,
+          fixed: false
+        };
+      }
+
+      function scrollHandlerInner(section, top) {
+        var diff = top - section.top;
+        var progressStyle = section.progress.style;
+        var progressStyleWidth = progressStyle.width;
+        if (diff >= -section.topLatch) {
+          if (diff < section.height) {
+            progressStyle.width = Math.min((diff + section.topLatch) / (section.height - 42), 1) * 100 + '%';
+          } else if (progressStyleWidth !== '100%') progressStyle.width = '100%';
+          if (section.fixed !== 'top') {
+            section.fixed = 'top';
+            section.header.style.cssText = 'position:fixed;top:' + section.topLatch + 'px';
+            section.el.style.cssText = 'padding-top: 42px';
+          }
+        } else {
+          if (progressStyleWidth !== '0px') progressStyle.width = 0;
+          if (diff + windowHeight - section.bottomLatch - 42 < 0) {
+            if (section.fixed !== 'bottom') {
+              section.fixed = 'bottom';
+              section.header.style.cssText = 'position: fixed;bottom:' + section.bottomLatch + 'px';
+              section.el.style.cssText = 'padding-bottom: 42px';
+            }
+          } else if (section.fixed) {
+            section.fixed = false;
+            section.el.style.cssText = section.header.style.cssText = '';
+          }
+        }
+      }
+
+      function stickToBottom(section) {
+        section.fixed = false;
+        section.header.style.cssText = 'position: absolute;bottom:' + section.bottomLatch + 'px';
+        section.progress.style.width = '100%';
+      }
+
+      function scrollHandler() {
+        var top = window.pageYOffset;
+        if (articleBottom - top < compressedHeight) {
+          if (!stickyLatch) {
+            stickyLatch = 'bottom';
+            sections.forEach(stickToBottom);
+          }
+        } else {
+          if (stickyLatch) stickyLatch = false;
+          sections.forEach(function (section) {
+            scrollHandlerInner(section, top);
+          });
+        }
+      }
+
+      function initGlobal() {
+        windowHeight = window.innerHeight;
+        articleTop = getTop(article);
+        sections = sections.map(initSections);
+        stickyLatch = false;
+        scrollHandler();
+        articleBottom = articleTop + article.offsetHeight;
+      }
+
+      var article = document.querySelector('article');
+      var sections = Array.prototype.slice.call(article.querySelectorAll('section'), 0);
+      var compressedHeight = sections.length * 42;
+      var windowHeight, articleTop, articleBottom, sections, stickyLatch, resizeDone;
+      initGlobal();
+      window.addEventListener('scroll', scrollHandler, false);
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeDone);
+        resizeDone = setTimeout(initGlobal, 500);
+      }, false);
+    }();
+  </script>
 </body>
 </html>

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cardSlider = girdImgs.querySelector(".cardSlider");
 
         if (!cardSlider) {
-          console.warn("未找到 .cardSlider");
+          // console.warn("未找到 .cardSlider");
           return;
         }
 
@@ -46,18 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
  
 
+  function setPagesHeight() {
+    const pages = document.querySelector('.pages');
+    const pagedown = document.querySelector('.pagedown');
+    const pagedownHeight = pagedown.offsetHeight;    
+    const homePageHeight = pagedownHeight + 250;
+    pages.style.height = `${homePageHeight}px`;
+  }
+
   let transitionEnd = true;
 
   function toggleOpen() {
     if (transitionEnd) {
       this.classList.toggle('card--expanded');
       window.lenis.resize();
+      setPagesHeight();
       // 修改子元素样式
-      const cardInner = this.children[0];
-      if (cardInner && cardInner.children[1]) {
-        cardInner.children[1].style.backgroundColor = "var(--menu-bg-darker)";
-        cardInner.children[1].style.color = "rgba(22, 22, 22, 1.0)";
-      }
+      // const cardInner = this.children[0];
+      // if (cardInner && cardInner.children[1]) {
+      //   cardInner.children[1].style.backgroundColor = "var(--menu-bg-darker)";
+      //   cardInner.children[1].style.color = "rgba(22, 22, 22, 1.0)";
+      // }
       transitionEnd = false;
     }
   }
@@ -79,11 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
       duration: 250,
       stagger: 10,
       onStart: elements => {
-        console.log("动画开始，transitionEnd 状态：" + transitionEnd);
+        // console.log("动画开始，transitionEnd 状态：" + transitionEnd);
       },
       onEnd: elements => {
         transitionEnd = true;
-        console.log("动画结束，transitionEnd 状态：" + transitionEnd);
+        setPagesHeight();
+        // console.log("动画结束，transitionEnd 状态：" + transitionEnd);
       }
     });
   });
@@ -97,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (expandedCard && transitionEnd && scrollPos < previousScrollPos) {
       expandedCard.classList.remove('card--expanded');
       transitionEnd = false;
-      console.log("滚动关闭卡片，transitionEnd 状态：" + transitionEnd);
+      // console.log("滚动关闭卡片，transitionEnd 状态：" + transitionEnd);
     }
 
     previousScrollPos = scrollPos;

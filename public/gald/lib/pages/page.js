@@ -2,6 +2,7 @@ class PagesManager {
   constructor() {
     this.pages = document.querySelector(".pages");
     this.pageList = this.pages.querySelectorAll(".page");
+    this.pagedown = this.pages.querySelector(".pagedown");
     this.navs = document.querySelectorAll(".nav");
     this.pageLogo = document.querySelectorAll(".pageLogo");
 
@@ -17,8 +18,9 @@ class PagesManager {
       this.setPagesHeight();
     })
   }
-
+  
   init() {
+    this.setPagesHeight();
     this.navToPage();
     this.logoScale();
     this.keywordAnimationCycle();
@@ -37,12 +39,14 @@ class PagesManager {
   }
 
   setPagesHeight() {
-    const homePageHeight = this.pageList[0].offsetHeight + 250;
+    const pagedownHeight = this.pagedown.offsetHeight;    
+    const homePageHeight = pagedownHeight + 250;
     this.pages.style.height = `${homePageHeight}px`;
-    if (this.currentPage) {
-      const currentPageHeight = this.currentPageHeight.offsetHeight + 250;
-      this.pages.style.height = `${currentPageHeight}px`;      
-    }
+    
+    // if (this.currentPage) {
+    //   const currentPageHeight = this.currentPageHeight.offsetHeight + 250;
+    //   this.pages.style.height = `${currentPageHeight}px`;      
+    // }
 
   }
 
