@@ -101,12 +101,74 @@
   color: rgba(240, 248, 255, 0.5);
 }
 
-.pages .page .pageContent .galdIntri p {
-  line-height: 2em;
-  font-size: 1.2em;
-  color: rgba(240, 248, 255, 0.5);
-}
-
+        .galdIntri {
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 30px;
+            color: #fff;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+        .galdIntri h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--menu-bg-darker);
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+        .galdIntri h3 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            margin: 25px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid aliceblue;
+        }
+        .galdIntri p {
+            font-size: 16px;
+            font-weight: 300;
+            color: #e0e0e0;
+            margin: 0 0 20px;
+            text-align: justify;
+        }
+        .galdIntri a.link-1, .galdIntri a.link-2 {
+            position: relative;
+            text-decoration: none;
+            color: var(--menu-bg-lighter);
+            padding: 0 3px;
+            transition: all 0.3s ease;
+        }
+        .galdIntri a.link-1::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(to right, var(--menu-bg-darker), #a3bffa);
+            transition: width 0.3s ease;
+        }
+        .galdIntri a.link-1:hover::after {
+            width: 100%;
+        }
+        .galdIntri a.link-1:hover {
+            color: #a3bffa;
+        }
+        .galdIntri a.link-2 {
+            background: linear-gradient(to right, var(--menu-bg-darker) 50%, transparent 50%);
+            background-size: 200% 100%;
+            background-position: left bottom;
+            transition: background-position 0.4s ease, color 0.4s ease;
+        }
+        .galdIntri a.link-2:hover {
+            background-position: right bottom;
+            color: #fff;
+        }
+        .galdIntri strong {
+            font-weight: bold;
+            color: #a3bffa;
+        }
 .pages .page .pageTitle p {
   font-size: 1.5em;
   color: aliceblue;
