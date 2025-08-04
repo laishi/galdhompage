@@ -140,11 +140,11 @@
   text-decoration: none;
   text-align: center;
   display: inline-block;
-  padding: 1em;
   background: var(--keyworlds-color);
   color: #fff;
   text-transform: uppercase;
-  font-size: 1.5em;
+  font-size: 1.25em;
+  padding: 0.5em;
   border-radius: 10px;
   z-index: 0;
   overflow: hidden;

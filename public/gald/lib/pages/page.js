@@ -42,12 +42,6 @@ class PagesManager {
     const pagedownHeight = this.pagedown.offsetHeight;    
     const homePageHeight = pagedownHeight + 250;
     this.pages.style.height = `${homePageHeight}px`;
-    
-    // if (this.currentPage) {
-    //   const currentPageHeight = this.currentPageHeight.offsetHeight + 250;
-    //   this.pages.style.height = `${currentPageHeight}px`;      
-    // }
-
   }
 
   navToPage() {

@@ -11,10 +11,13 @@
 }
 
 .footer-content {
-    position: relative;
+    position: absolute;
+    bottom: 0;
     width: 100%;
+    max-width: 512px;
     height: 10vh;
-    background-color: #18C499;
+    /* background-color: #051f1848; */
+    color: var(--background-color);
     z-index: 10;
 }
 
