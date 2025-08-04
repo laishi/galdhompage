@@ -79,7 +79,7 @@
 }
 
 .svgbox .headerbg .useHeaderbgPathMask {
-    fill: var(--menu-bg-darker);
+    fill: var(--menu-bg-floordark);
     opacity: 1;
     transition: opacity 3s ease;
 }

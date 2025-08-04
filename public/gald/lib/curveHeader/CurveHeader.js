@@ -93,8 +93,8 @@ handlerEvent() {
 
     headerMask() {
         const galdParticle = document.querySelector(".galdParticle");
-        // const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
-        const maskList = [galdParticle];
+        const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
+        const maskList = [useHeaderbgPathMask];
         maskList.forEach(mask => {
             mask.style.opacity = 0;
         });        
