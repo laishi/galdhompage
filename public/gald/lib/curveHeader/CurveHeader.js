@@ -83,9 +83,9 @@ class CurveHeader {
     }
 
     headerMask() {
-        const galdParticle = document.querySelector(".galdParticle");
-        // const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
-        const maskList = [galdParticle];
+        const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
+        const maskList = [useHeaderbgPathMask];
+        useHeaderbgPathMask.style.opacity = 0.5;
         maskList.forEach(mask => {
             mask.style.opacity = 0;
         });        
