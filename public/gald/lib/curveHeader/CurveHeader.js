@@ -10,7 +10,7 @@ const navTips = [
 ];
 
 const imageUrls = [
-    "/public/gald/img/header/jzled-small.png",
+    "https://cdn.jsdelivr.net/gh/laishi/galdhompage/public/gald/img/header/jzled-small.png",
     "https://cn.bing.com/th?id=OHR.VietnamFalls_EN-US9133406245_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4",
     "https://cn.bing.com/th?id=OHR.DelicateArch_EN-US2369284902_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4",
     "https://cn.bing.com/th?id=OHR.IcelandSolstice_EN-US2057542769_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4"

@@ -12,7 +12,7 @@
     --header-stroke: 5px;
     --nav-color: rgba(255, 255, 255, 0.7);
     --background-color: rgb(24, 24, 32);
-    --page-bgimg: url(/public/gald/img/backgrounds/bg-subtle-1-dark-800w.jpg);
+    --page-bgimg: url(https://cdn.jsdelivr.net/gh/laishi/galdhompage/public/gald/img/backgrounds/bg-subtle-1-dark-800w.jpg);
 
     --text-white: aliceblue;
     --text-gray: rgb(150, 150, 150);
