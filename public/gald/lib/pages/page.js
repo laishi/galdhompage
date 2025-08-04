@@ -20,9 +20,9 @@ class PagesManager {
   }
   
   init() {
-    this.setPagesHeight();
     this.navToPage();
     this.logoScale();
+    this.setPagesHeight();
     this.keywordAnimationCycle();
     this.hashScroll();
 
@@ -39,10 +39,26 @@ class PagesManager {
   }
 
   setPagesHeight() {
-    const pagedownHeight = this.pagedown.offsetHeight;    
+    const pagedownHeight = this.pagedown.offsetHeight;
     const homePageHeight = pagedownHeight + 250;
     this.pages.style.height = `${homePageHeight}px`;
   }
+
+
+  keywordAnimationCycle() {
+    const allLinks = this.pages.querySelectorAll(".keywordsBtn a");
+    allLinks.forEach(link => link.classList.remove("animate-border"));
+
+    const links = this.pagedown.querySelectorAll(".keywordsBtn a");
+    let currentIndex = 0;
+    setInterval(() => {
+      links.forEach(link => link.classList.remove("animate-border"));
+      links[currentIndex].classList.add("animate-border");
+      currentIndex = (currentIndex + 1) % links.length;
+    }, 2500);
+  }
+
+
 
   navToPage() {
 
@@ -54,17 +70,17 @@ class PagesManager {
         this.pageList[index].classList.add("pagedown");
         this.logoScale();
         this.currentPage = this.pageList[index];
-       
-        const pageHeight = this.pageList[index].offsetHeight + 250;
-        this.pages.style.height = `${pageHeight}px`;
 
-        window.lenis.resize();
-        window.lenis.scrollTo(viewboxHeight, {
-          duration: 1.2,
-          easing: t => t * (2 - t)
-        });
+        // window.lenis.resize();
+        // window.lenis.scrollTo(viewboxHeight, {
+        //   duration: 1.2,
+        //   easing: t => t * (2 - t)
+        // });
+
+        this.pagedown = this.pageList[index];
 
         this.keywordAnimationCycle();
+        this.setPagesHeight()
         this.navState = {
           index: index,
           navName: nav.className,
@@ -75,18 +91,6 @@ class PagesManager {
     });
   }
 
-  keywordAnimationCycle() {
-    const pagedown = this.pages.querySelector(".pagedown");
-    const links = pagedown.querySelectorAll(".keywordsBtn a");
-
-    let currentIndex = 0;
-
-    setInterval(() => {
-      links.forEach(link => link.classList.remove("animate-border"));
-      links[currentIndex].classList.add("animate-border");
-      currentIndex = (currentIndex + 1) % links.length;
-    }, 2500);
-  }
 
   logoScale() {
     const pagedown = this.pages.querySelector(".pagedown");

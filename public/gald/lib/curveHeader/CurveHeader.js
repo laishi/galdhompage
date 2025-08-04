@@ -38,14 +38,13 @@ class CurveHeader {
         this.headerImage = document.querySelector(`#${idName} .svgbox .headerBackgroundImg`);
         this.girlImg = document.querySelector(`#${idName} .girlImg`);
         this.textTip = document.querySelectorAll(`#${idName} .svgbox .textTip`);
+        this.clipImages = document.querySelectorAll(".clipImg");
+        this.dancer = document.querySelectorAll(".dancer");
+        this.jzled = document.querySelector(".jzled");
 
-        this.pages = document.querySelectorAll(".page");
-        this.pagedown = document.querySelectorAll(".page.pagedown");
-        
-
+        this.curveData = "";
         this.curveHeight = 0;
         this.curveLength = 0;
-        this.curveData = "";
         this.currentImageIndex = 0;
         this.viewBoxHeight = 500;
         this.sideHeight = 0;
@@ -58,28 +57,90 @@ class CurveHeader {
         this.lastSetupTime = 0;
         this.cooldown = 1000;
         this.flowEnd = false;
+        this.parallaxHandler = null;
         this.init();
     }
 
     init() {
-        this.updatePath();
-        this.lazyImg()
+        this.updatePath(window.scrollY);
+        this.lazyImg();
         this.changeHue();
         this.navFlow();
         this.navsTip();
-        this.handlerEvent()
+        this.handlerEvent();
     }
-    
-    handlerEvent() {        
+
+    handlerEvent() {
         window.addEventListener('resize', () => {
             this.updatePath();
-            this.setupParallaxImages();
-            
+            this.headerImgPose();
         });
         window.addEventListener('scroll', () => {
             this.scrollY = window.scrollY || document.documentElement.scrollTop;
             this.updatePath(this.scrollY);
         });
+    }
+
+    updatePath(yScroll = 120) {
+        const ww = window.innerWidth;
+        const wh = window.innerHeight;
+        const curveOffset = 25;
+        const middleOffset = Math.max(150, ww / 10);
+        const svgboxOffsetTop = this.svgbox.offsetTop;
+        const relativeScroll = Math.max(0, yScroll - svgboxOffsetTop);
+        let limitY = Math.min((middleOffset - curveOffset) * 2, relativeScroll);
+        let middleHeight = wh * (this.config.svgHeight / 100);
+        let sideHeight = middleHeight - middleOffset;
+        let curveHeight = middleHeight - curveOffset - limitY;
+
+        if (!this.config.isdown) {
+            sideHeight = middleHeight;
+            middleHeight = sideHeight - middleOffset;
+            curveHeight = middleHeight + curveOffset + limitY;
+        }
+        this.sideHeight = sideHeight;
+        this.curveHeight = curveHeight;
+        const centerLeft = ww * 0.25;
+        const centerRight = ww - centerLeft;
+        const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
+        const headData = curveData + ` V 0 H 0 Z`;
+        let viewboxHeight = Math.max(curveHeight, sideHeight) + 75;
+        this.viewBoxHeight = viewboxHeight;
+
+        this.titleInfo.style.height = `${curveHeight}px`;
+        this.svgbox.style.height = `${viewboxHeight}px`;
+        this.headerbg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
+        this.headerbgPath.setAttribute("d", headData);
+        this.headerfg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
+        this.headerPath.setAttribute("d", headData);
+        this.curvePath.setAttribute("d", curveData);
+
+        const baseOffset = 10;
+        let shapTopOffset = curveHeight - curveOffset;
+        let shapBottomOffset = curveHeight + curveOffset;
+        let baseTopHeight = sideHeight - baseOffset / 2;
+        let baseBottomHeight = sideHeight + baseOffset / 2;
+        const shapTop = `M 0,${baseTopHeight} Q ${centerLeft},${shapTopOffset} ${ww / 2},${shapTopOffset} Q ${centerRight},${shapTopOffset} ${ww},${baseTopHeight} v ${baseOffset}`;
+        const shapBottom = ` Q ${centerRight},${shapBottomOffset} ${ww / 2},${shapBottomOffset} Q ${centerLeft},${shapBottomOffset} 0,${baseBottomHeight} Z`;
+        const curveOffsetData = shapTop + " " + shapBottom;
+        this.headerShape.setAttribute("d", curveOffsetData);
+        this.curveData = curveData;
+        this.curveLength = this.curvePath.getTotalLength();
+
+        if (Math.abs(curveHeight - sideHeight) > 50) {
+            this.subTitle.style.top = `${sideHeight - 50}px`;
+            this.subTitle.style.opacity = 1;
+        } else {
+            this.subTitle.style.opacity = 0;
+        }
+
+        this.updateFun(ww, curveHeight);
+    }
+
+    updateFun(ww, curveHeight) {
+        this.girlCenter(ww, curveHeight);
+        this.setNavsOnPath();
+        this.headerImgPose();
     }
 
     headerMask() {
@@ -88,74 +149,30 @@ class CurveHeader {
         useHeaderbgPathMask.style.opacity = 0.5;
         maskList.forEach(mask => {
             mask.style.opacity = 0;
-        });        
+        });
     }
 
     lazyImg() {
         const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
         const jzledElement = document.querySelector(".clipImg.jzled");
-
-        // 优先加载 jzled 图片
         if (jzledElement) {
             const src = jzledElement.getAttribute("data-href");
             if (src) {
                 jzledElement.setAttribute("href", src);
-                jzledElement.addEventListener("load", () => {    
-                    this.headerbgParallaxImages.style.opacity = 0.5;                
+                jzledElement.addEventListener("load", () => {
+                    lazyElements.forEach((el) => {
+                        const src = el.getAttribute("data-href");
+                        el.setAttribute("href", src);
+                    });
+                    this.headerbgParallaxImages.style.opacity = 0.3;
+                    this.headerMask();
                     setTimeout(() => {
                         this.headerbgParallaxImages.style.opacity = 1;
-                        this.headerMask();
-                    }, 5000);
+                    }, 3000);
                 }, { once: true });
-
-                // 错误处理
-                jzledElement.addEventListener("error", () => {
-                    console.error("Failed to load jzled image:", src);
-                }, { once: true });
-            } else {
-                console.warn("jzled image missing data-href:", jzledElement);
             }
         }
-
-        if ("IntersectionObserver" in window) {
-            const observer = new IntersectionObserver(
-                (entries, observer) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            const el = entry.target;
-                            const src = el.getAttribute("data-href");
-                            if (src) {
-                                el.setAttribute("href", src);
-                                el.addEventListener("load", () => {
-                                }, { once: true });
-                            } else {
-                                console.warn("No valid image source for:", el);
-                            }
-                            observer.unobserve(el);
-                        }
-                    });
-                },
-                {
-                    rootMargin: "200px",
-                    threshold: 0.1,
-                }
-            );
-
-            lazyElements.forEach((el) => {
-                observer.observe(el);
-            });
-        } else {
-            // 后备方案：直接加载所有图片
-            lazyElements.forEach((el) => {
-                const src = el.getAttribute("data-href");
-                if (src) {
-                    el.setAttribute("href", src);
-                } else {
-                }
-            });
-        }
     }
-
 
     remap(value, inMin, inMax, outMin, outMax) {
         return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
@@ -170,37 +187,33 @@ class CurveHeader {
         }, 5000);
     }
 
-    setupParallaxImages() {
-        const clipImages = document.querySelectorAll(".clipImg");
-        const dancer = document.querySelectorAll(".dancer");
-        const jzled = document.querySelector(".jzled");
+    headerImgPose() {
         const ww = window.innerWidth;
-        const wh = window.innerHeight;    
-        
-        const jzledBBox = jzled.getBBox();
+        const wh = window.innerHeight;
+        const jzledBBox = this.jzled.getBBox();
         const jzledWidth = jzledBBox.width;
         const jzledHeight = jzledBBox.height;
         const jzledCenterX = jzledBBox.x + jzledWidth / 2;
-        jzled.style.transition = "";
-        jzled.setAttribute("x", (ww - jzledWidth) / 2);
-        jzled.setAttribute("y", (this.curveHeight-jzledHeight) / 2);    
-        
-        dancer.forEach((dance, index) => {
+        this.jzled.style.transition = "";
+        this.jzled.setAttribute("x", (ww - jzledWidth) / 2);
+        this.jzled.setAttribute("y", (this.curveHeight - jzledHeight) / 2);
+
+        this.dancer.forEach((dance, index) => {
             dance.style.transition = "";
             const danceBBox = dance.getBBox();
             const danceWidth = danceBBox.width;
             const danceHeight = danceBBox.height;
             const danceCenterX = danceBBox.x + jzledWidth / 2;
-
             dance.setAttribute("x", (ww - danceWidth) / 2);
-            dance.setAttribute("y", (this.curveHeight-danceHeight));
-            const randomOffsetX = (Math.random() - 0.5) * jzledWidth;
-            const posy = Math.max((dancer.length-index) * (-this.curveHeight/2/dancer.length), -this.curveHeight/2+danceHeight*1.1)
-            dance.style.transform = `translate(${randomOffsetX}px, ${posy}px)`;        
-
+            dance.setAttribute("y", (this.curveHeight - danceHeight));
+            setTimeout(() => {
+                const randomOffsetX = (Math.random() - 0.5) * jzledWidth;
+                const posy = Math.max((this.dancer.length - index) * (-this.curveHeight / 2 / this.dancer.length), -this.curveHeight / 2 + danceHeight);
+                dance.style.transform = `translate(${randomOffsetX}px, ${posy}px)`;
+            }, 100);
         });
 
-        const imageStates = Array.from(clipImages).map((ele, index) => {
+        const imageStates = Array.from(this.clipImages).map((ele, index) => {
             const x = parseFloat(ele.getAttribute("x")) || 0;
             const y = parseFloat(ele.getAttribute("y")) || 0;
             return {
@@ -211,18 +224,23 @@ class CurveHeader {
             };
         });
 
-        window.addEventListener("mousemove", function(e) {
+        if (this.parallaxHandler) {
+            window.removeEventListener("mousemove", this.parallaxHandler);
+        }
+
+        this.parallaxHandler = (e) => {
             const offsetX = e.clientX - ww / 2;
             const offsetY = e.clientY - wh / 2;
             imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
                 const xpos = offsetX * scale;
-                const ypos = offsetY * scale * 1;
+                const ypos = offsetY * scale;
                 ele.setAttribute("x", sourceX + xpos);
                 ele.setAttribute("y", sourceY + ypos);
             });
-        });
-    }
+        };
 
+        window.addEventListener("mousemove", this.parallaxHandler);
+    }
 
     girlCenter(width, curveHeight) {
         const imgWidth = 378;
@@ -235,32 +253,30 @@ class CurveHeader {
     }
 
     navFlow() {
+        const maxSpave = 120;
         this.menu.style.opacity = 1;
         this.flowEnd = false;
         let space = this.curveLength / this.navs.length;
         const animate = () => {
-            if (space > 120) {
+            if (space > maxSpave) {
                 space -= this.navs.length;
                 this.setNavsOnPath(space);
                 requestAnimationFrame(animate);
-            } else {                
+            } else {
                 this.flowEnd = true;
                 this.logoNavExpand();
-                
                 this.navLogo.classList.add("jelly-animate");
                 this.navLogo.addEventListener("animationend", () => {
-                this.navLogo.classList.remove("jelly-animate");
+                    this.navLogo.classList.remove("jelly-animate");
                 }, { once: true });
             }
         };
         requestAnimationFrame(animate);
     }
 
-
     logoNavExpand() {
         let animating = false;
         let animated = false;
-
         window.addEventListener('scroll', () => {
             if (window.scrollY > 0) {
                 animated = false;
@@ -272,7 +288,6 @@ class CurveHeader {
                 if (window.scrollY !== 0 || animating || animated) return;
                 animating = true;
                 let space = 0;
-
                 const animate = () => {
                     if (space < 120) {
                         space += 10;
@@ -283,7 +298,6 @@ class CurveHeader {
                         animated = true;
                     }
                 };
-
                 requestAnimationFrame(animate);
             });
         };
@@ -292,20 +306,18 @@ class CurveHeader {
         setupMouseoverAnimate(this.headerShape);
     }
 
-
     setNavsOnPath(navSpace = 0) {
         let gap = navSpace / this.curveLength;
         const maxScale = 1;
         const minScale = 0.8;
         const minWidth = Math.min((Math.max(0, (this.scrollY - this.svgbox.offsetTop)) / 100), 1.1);
-
         if (this.flowEnd) {
             if (Math.max(0, (this.scrollY - this.svgbox.offsetTop)) === 0) {
                 this.navLogo.classList.add("jelly-animate");
                 this.navLogo.addEventListener("animationend", () => {
                     this.navLogo.classList.remove("jelly-animate");
                 }, { once: true });
-            }            
+            }
         }
 
         const navs = Array.from(this.navs);
@@ -343,7 +355,6 @@ class CurveHeader {
         const navTip = this.navTip;
         defaultTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
         navTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
-
         this.menu.addEventListener("mouseover", event => {
             const nav = event.target.closest('.nav');
             if (!nav) return;
@@ -356,7 +367,6 @@ class CurveHeader {
             navTip.style.letterSpacing = '0.1em';
             navTip.style.opacity = '1';
         });
-
         this.menu.addEventListener("mouseout", event => {
             const nav = event.target.closest('.nav');
             if (!nav) return;
@@ -366,78 +376,18 @@ class CurveHeader {
             navTip.style.opacity = '0';
         });
     }
-
-    updatePath(yScroll = 0) {
-        const ww = window.innerWidth;
-        const wh = window.innerHeight;
-        const curveOffset = 25;
-        const middleOffset = Math.max(150, ww / 10);
-        const svgboxOffsetTop = this.svgbox.offsetTop;
-        const relativeScroll = Math.max(0, yScroll - svgboxOffsetTop);
-        let limitY = Math.min((middleOffset - curveOffset) * 2, relativeScroll);
-        let middleHeight = wh * (this.config.svgHeight / 100);
-        let sideHeight = middleHeight - middleOffset;
-        let curveHeight = middleHeight - curveOffset - limitY;
-
-        if (!this.config.isdown) {
-            sideHeight = middleHeight;
-            middleHeight = sideHeight - middleOffset;
-            curveHeight = middleHeight + curveOffset + limitY;
-        }
-        this.sideHeight = sideHeight;
-
-        this.curveHeight = curveHeight;
-        const centerLeft = ww * 0.25;
-        const centerRight = ww - centerLeft;
-        const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
-        const headData = curveData + ` V 0 H 0 Z`;
-        let viewboxHeight = Math.max(curveHeight, sideHeight) + 75;
-        this.viewboxHeight = viewboxHeight;
-        // viewboxHeight = sideHeight + middleOffset + 50;
-
-        this.titleInfo.style.height = `${curveHeight}px`;
-        this.svgbox.style.height = `${viewboxHeight}px`;
-        this.headerbg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
-        this.headerbgPath.setAttribute("d", headData);
-        this.headerfg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
-        this.headerPath.setAttribute("d", headData);
-        this.curvePath.setAttribute("d", curveData);
-
-        const baseOffset = 10;
-        let shapTopOffset = curveHeight - curveOffset;
-        let shapBottomOffset = curveHeight + curveOffset;
-        let baseTopHeight = sideHeight - baseOffset / 2;
-        let baseBottomHeight = sideHeight + baseOffset / 2;
-        const shapTop = `M 0,${baseTopHeight} Q ${centerLeft},${shapTopOffset} ${ww / 2},${shapTopOffset} Q ${centerRight},${shapTopOffset} ${ww},${baseTopHeight} v ${baseOffset}`;
-        const shapBottom = ` Q ${centerRight},${shapBottomOffset} ${ww / 2},${shapBottomOffset} Q ${centerLeft},${shapBottomOffset} 0,${baseBottomHeight} Z`;
-        const curveOffsetData = shapTop + " " + shapBottom;
-        this.headerShape.setAttribute("d", curveOffsetData);
-        this.curveData = curveData;
-        this.curveLength = this.curvePath.getTotalLength();
-
-        
-        
-        if (Math.abs(curveHeight - sideHeight) > 50) {
-            this.subTitle.style.top = `${sideHeight - 50}px`;
-            this.subTitle.style.opacity = 1;
-        } else {
-            this.subTitle.style.opacity = 0;
-        }
-        
-        this.initfun(ww, curveHeight);
-    }
-
-    initfun(ww, curveHeight) {
-        this.setupParallaxImages(curveHeight);
-        this.girlCenter(ww, curveHeight);
-        this.setNavsOnPath();       
-
-    }
-
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    window['CurveHeader'] = new CurveHeader('CurveHeader', true, { svgHeight: 80, isdown: true });
+    window.addEventListener('beforeunload', () => {
+        localStorage.setItem('scrollY', window.scrollY);
+    });
+    window.addEventListener('load', () => {
+        const savedY = localStorage.getItem('scrollY');
+        if (savedY) {
+            // console.log("savedY :", savedY);
+            // window.scrollTo(0, parseInt(savedY));
+        }
+    });
+    window.CurveHeader = new CurveHeader('CurveHeader', true, { svgHeight: 80, isdown: true });
 });
-
