@@ -42,6 +42,8 @@ class CurveHeader {
         this.dancer = document.querySelectorAll(".dancer");
         this.jzled = document.querySelector(".jzled");
 
+        this.useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
+
         this.curveData = "";
         this.curveHeight = 0;
         this.curveLength = 0;
@@ -81,7 +83,7 @@ class CurveHeader {
         });
     }
 
-    updatePath(yScroll = 120) {
+    updatePath(yScroll = 0) {
         const ww = window.innerWidth;
         const wh = window.innerHeight;
         const curveOffset = 25;
@@ -134,56 +136,59 @@ class CurveHeader {
             this.subTitle.style.opacity = 0;
         }
 
-        this.updateFun(ww, curveHeight);
+        this.updateFun(ww, curveHeight, yScroll);
     }
 
-    updateFun(ww, curveHeight) {
+    updateFun(ww, curveHeight, yScroll) {
         this.girlCenter(ww, curveHeight);
         this.setNavsOnPath();
         this.headerImgPose();
+        this.headerMask(yScroll)
+        console.log("yScroll: ", this.yScroll);
     }
 
-    headerMask() {
-        const useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
-        const maskList = [useHeaderbgPathMask];
-        useHeaderbgPathMask.style.opacity = 0.5;
+    headerMask(yScroll = 0) {
+        const maskList = [this.useHeaderbgPathMask];
+        const opacity = Math.max(0, Math.min(0.95, yScroll / 500));
+        console.log("opacity: ", opacity);
+        this.useHeaderbgPathMask.style.opacity = 0.5;
         maskList.forEach(mask => {
-            mask.style.opacity = 0;
+            mask.style.opacity = opacity;
         });
     }
 
-lazyImg() {
-    const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
-    const jzledElement = document.querySelector(".clipImg.jzled");
+    lazyImg() {
+        const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
+        const jzledElement = document.querySelector(".clipImg.jzled");
 
-    if (jzledElement) {
-        const src = jzledElement.getAttribute("data-href");
+        if (jzledElement) {
+            const src = jzledElement.getAttribute("data-href");
 
-        if (src) {
-            const startTime = performance.now(); // 记录加载开始时间
+            if (src) {
+                const startTime = performance.now(); // 记录加载开始时间
 
-            jzledElement.setAttribute("href", src);
+                jzledElement.setAttribute("href", src);
 
-            jzledElement.addEventListener("load", () => {
-                const endTime = performance.now(); // 加载完成时间
-                const loadTime = endTime - startTime;
-                console.log(`jzled 加载时间: ${loadTime.toFixed(2)} ms`);
+                jzledElement.addEventListener("load", () => {
+                    const endTime = performance.now(); // 加载完成时间
+                    const loadTime = endTime - startTime;
+                    console.log(`jzled 加载时间: ${loadTime.toFixed(2)} ms`);
 
-                lazyElements.forEach((el) => {
-                    const src = el.getAttribute("data-href");
-                    el.setAttribute("href", src);
-                });
+                    lazyElements.forEach((el) => {
+                        const src = el.getAttribute("data-href");
+                        el.setAttribute("href", src);
+                    });
 
-                this.headerbgParallaxImages.style.opacity = 0.3;
-                this.headerMask();
+                    this.headerbgParallaxImages.style.opacity = 0.3;
+                    this.headerMask();
 
-                setTimeout(() => {
-                    this.headerbgParallaxImages.style.opacity = 1;
-                }, 3000);
-            }, { once: true });
+                    setTimeout(() => {
+                        this.headerbgParallaxImages.style.opacity = 1;
+                    }, 3000);
+                }, { once: true });
+            }
         }
     }
-}
 
     remap(value, inMin, inMax, outMin, outMax) {
         return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
