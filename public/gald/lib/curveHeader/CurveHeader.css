@@ -81,7 +81,7 @@
 .svgbox .headerbg .useHeaderbgPathMask {
     fill: var(--menu-bg-floordark);
     opacity: 1;
-    transition: opacity 3s ease;
+    transition: opacity 1.0s ease;
 }
 
 
