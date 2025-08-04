@@ -152,27 +152,38 @@ class CurveHeader {
         });
     }
 
-    lazyImg() {
-        const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
-        const jzledElement = document.querySelector(".clipImg.jzled");
-        if (jzledElement) {
-            const src = jzledElement.getAttribute("data-href");
-            if (src) {
-                jzledElement.setAttribute("href", src);
-                jzledElement.addEventListener("load", () => {
-                    lazyElements.forEach((el) => {
-                        const src = el.getAttribute("data-href");
-                        el.setAttribute("href", src);
-                    });
-                    this.headerbgParallaxImages.style.opacity = 0.3;
-                    this.headerMask();
-                    setTimeout(() => {
-                        this.headerbgParallaxImages.style.opacity = 1;
-                    }, 3000);
-                }, { once: true });
-            }
+lazyImg() {
+    const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
+    const jzledElement = document.querySelector(".clipImg.jzled");
+
+    if (jzledElement) {
+        const src = jzledElement.getAttribute("data-href");
+
+        if (src) {
+            const startTime = performance.now(); // 记录加载开始时间
+
+            jzledElement.setAttribute("href", src);
+
+            jzledElement.addEventListener("load", () => {
+                const endTime = performance.now(); // 加载完成时间
+                const loadTime = endTime - startTime;
+                console.log(`jzled 加载时间: ${loadTime.toFixed(2)} ms`);
+
+                lazyElements.forEach((el) => {
+                    const src = el.getAttribute("data-href");
+                    el.setAttribute("href", src);
+                });
+
+                this.headerbgParallaxImages.style.opacity = 0.3;
+                this.headerMask();
+
+                setTimeout(() => {
+                    this.headerbgParallaxImages.style.opacity = 1;
+                }, 3000);
+            }, { once: true });
         }
     }
+}
 
     remap(value, inMin, inMax, outMin, outMax) {
         return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
