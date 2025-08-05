@@ -10,7 +10,7 @@ const navTips = [
 ];
 
 const imageUrls = [
-    "https://cdn.jsdelivr.net/gh/laishi/galdhompage/public/gald/img/header/jzled-small.png",
+    "/public/gald/img/header/jzled-small.png",
     "https://cn.bing.com/th?id=OHR.VietnamFalls_EN-US9133406245_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4",
     "https://cn.bing.com/th?id=OHR.DelicateArch_EN-US2369284902_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4",
     "https://cn.bing.com/th?id=OHR.IcelandSolstice_EN-US2057542769_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4"
@@ -19,29 +19,43 @@ const imageUrls = [
 class CurveHeader {
     constructor(idName, isdown = true, config = { svgHeight: 10, isdown: true }) {
         this.idName = idName;
-        this.svgbox = document.querySelector(`#${idName} .svgbox`);
-        this.titleInfo = document.querySelector(`#${idName} .svgbox .titleInfo`);
-        this.subTitle = document.querySelector(`#${idName} .svgbox .subTitle`);
-        this.headerbg = document.querySelector(`#${idName} .headerbgSvg`);
-        this.headerbgPath = document.querySelector(`#${idName}-headerbgPath`);
-        this.useHeaderbgGradient = document.querySelector(`#${idName} .headerbg .useHeaderbgGradient`);
-        this.headerbgParallaxImages = document.querySelector(`#${idName} .headerbg .headerbgParallaxImages`);
-        this.headerfg = document.querySelector(`#${idName} .headerfgSvg`);
-        this.headerPath = document.querySelector(`#${idName}-headerPath`);
-        this.headerShape = document.querySelector(`#${idName}-headerShape`);
-        this.curvePath = document.querySelector(`#${idName}-curvePath`);
-        this.defaultTip = document.querySelector(`#${idName} .headerfg .defaultTip`);
-        this.navTip = document.querySelector(`#${idName} .headerfg .navTip`);
-        this.menu = document.querySelector(`#${idName} .svgbox .menus`);
-        this.navs = document.querySelectorAll(`#${idName} .svgbox .menus .nav`);
-        this.navLogo = document.querySelector(`#${idName} .nav.logo`);
-        this.headerImage = document.querySelector(`#${idName} .svgbox .headerBackgroundImg`);
-        this.girlImg = document.querySelector(`#${idName} .girlImg`);
-        this.textTip = document.querySelectorAll(`#${idName} .svgbox .textTip`);
+        this.config = config;
+        this.isdown = isdown;
+        this.imageUrls = imageUrls;
+        this.navTips = navTips;
+        this.imageSourceInfo = {
+            background: [[100, 602], [100, 802], [100, 1080], [100, 1280]],
+            jzled: [[1189, 547]],
+            dancers: [[93, 124], [110, 144], [114, 152], [127, 256], [193, 236]]
+        };
+
+        this.initElements();
+        this.init();
+    }
+
+    initElements() {
+        this.svgbox = document.querySelector(`#${this.idName} .svgbox`);
+        this.titleInfo = document.querySelector(`#${this.idName} .svgbox .titleInfo`);
+        this.subTitle = document.querySelector(`#${this.idName} .svgbox .subTitle`);
+        this.headerbg = document.querySelector(`#${this.idName} .headerbgSvg`);
+        this.headerbgPath = document.querySelector(`#${this.idName}-headerbgPath`);
+        this.useHeaderbgGradient = document.querySelector(`#${this.idName} .headerbg .useHeaderbgGradient`);
+        this.headerbgParallaxImages = document.querySelector(`#${this.idName} .headerbg .headerbgParallaxImages`);
+        this.headerfg = document.querySelector(`#${this.idName} .headerfgSvg`);
+        this.headerPath = document.querySelector(`#${this.idName}-headerPath`);
+        this.headerShape = document.querySelector(`#${this.idName}-headerShape`);
+        this.curvePath = document.querySelector(`#${this.idName}-curvePath`);
+        this.defaultTip = document.querySelector(`#${this.idName} .headerfg .defaultTip`);
+        this.navTip = document.querySelector(`#${this.idName} .headerfg .navTip`);
+        this.menu = document.querySelector(`#${this.idName} .svgbox .menus`);
+        this.navs = document.querySelectorAll(`#${this.idName} .svgbox .menus .nav`);
+        this.navLogo = document.querySelector(`#${this.idName} .nav.logo`);
+        this.headerImage = document.querySelector(`#${this.idName} .svgbox .headerBackgroundImg`);
+        this.girlImg = document.querySelector(`#${this.idName} .girlImg`);
+        this.textTip = document.querySelectorAll(`#${this.idName} .svgbox .textTip`);
         this.clipImages = document.querySelectorAll(".clipImg");
         this.dancer = document.querySelectorAll(".dancer");
         this.jzled = document.querySelector(".jzled");
-
         this.useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
 
         this.curveData = "";
@@ -52,15 +66,10 @@ class CurveHeader {
         this.sideHeight = 0;
         this.pathHeight = 0;
         this.scrollY = 0;
-        this.isdown = isdown;
-        this.config = config;
-        this.imageUrls = imageUrls;
-        this.navTips = navTips;
         this.lastSetupTime = 0;
         this.cooldown = 1000;
         this.flowEnd = false;
         this.parallaxHandler = null;
-        this.init();
     }
 
     init() {
@@ -77,6 +86,7 @@ class CurveHeader {
             this.updatePath();
             this.headerImgPose();
         });
+
         window.addEventListener('scroll', () => {
             this.scrollY = window.scrollY || document.documentElement.scrollTop;
             this.updatePath(this.scrollY);
@@ -86,8 +96,8 @@ class CurveHeader {
     updatePath(yScroll = 0) {
         const ww = window.innerWidth;
         const wh = window.innerHeight;
-        const curveOffset = 25;
-        const middleOffset = Math.max(150, ww / 10);
+        const curveOffset = Math.min(25, ww / 38);
+        const middleOffset = Math.max(50, ww / 10);
         const svgboxOffsetTop = this.svgbox.offsetTop;
         const relativeScroll = Math.max(0, yScroll - svgboxOffsetTop);
         let limitY = Math.min((middleOffset - curveOffset) * 2, relativeScroll);
@@ -100,6 +110,7 @@ class CurveHeader {
             middleHeight = sideHeight - middleOffset;
             curveHeight = middleHeight + curveOffset + limitY;
         }
+
         this.sideHeight = sideHeight;
         this.curveHeight = curveHeight;
         const centerLeft = ww * 0.25;
@@ -107,8 +118,8 @@ class CurveHeader {
         const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
         const headData = curveData + ` V 0 H 0 Z`;
         let viewboxHeight = Math.max(curveHeight, sideHeight) + 75;
-        this.viewBoxHeight = viewboxHeight;
 
+        this.viewBoxHeight = viewboxHeight;
         this.titleInfo.style.height = `${curveHeight}px`;
         this.svgbox.style.height = `${viewboxHeight}px`;
         this.headerbg.setAttribute("viewBox", `0 0 ${ww} ${viewboxHeight}`);
@@ -117,7 +128,7 @@ class CurveHeader {
         this.headerPath.setAttribute("d", headData);
         this.curvePath.setAttribute("d", curveData);
 
-        const baseOffset = 10;
+        const baseOffset = curveOffset * 0.2;
         let shapTopOffset = curveHeight - curveOffset;
         let shapBottomOffset = curveHeight + curveOffset;
         let baseTopHeight = sideHeight - baseOffset / 2;
@@ -125,6 +136,7 @@ class CurveHeader {
         const shapTop = `M 0,${baseTopHeight} Q ${centerLeft},${shapTopOffset} ${ww / 2},${shapTopOffset} Q ${centerRight},${shapTopOffset} ${ww},${baseTopHeight} v ${baseOffset}`;
         const shapBottom = ` Q ${centerRight},${shapBottomOffset} ${ww / 2},${shapBottomOffset} Q ${centerLeft},${shapBottomOffset} 0,${baseBottomHeight} Z`;
         const curveOffsetData = shapTop + " " + shapBottom;
+
         this.headerShape.setAttribute("d", curveOffsetData);
         this.curveData = curveData;
         this.curveLength = this.curvePath.getTotalLength();
@@ -143,14 +155,12 @@ class CurveHeader {
         this.girlCenter(ww, curveHeight);
         this.setNavsOnPath();
         this.headerImgPose();
-        this.headerMask(yScroll)
-        console.log("yScroll: ", this.yScroll);
+        this.headerMask(yScroll);
     }
 
     headerMask(yScroll = 0) {
         const maskList = [this.useHeaderbgPathMask];
         const opacity = Math.max(0, Math.min(0.95, yScroll / 500));
-        console.log("opacity: ", opacity);
         this.useHeaderbgPathMask.style.opacity = 0.5;
         maskList.forEach(mask => {
             mask.style.opacity = opacity;
@@ -163,25 +173,17 @@ class CurveHeader {
 
         if (jzledElement) {
             const src = jzledElement.getAttribute("data-href");
-
             if (src) {
-                const startTime = performance.now(); // 记录加载开始时间
-
+                const startTime = performance.now();
                 jzledElement.setAttribute("href", src);
-
                 jzledElement.addEventListener("load", () => {
-                    const endTime = performance.now(); // 加载完成时间
-                    const loadTime = endTime - startTime;
-                    console.log(`jzled 加载时间: ${loadTime.toFixed(2)} ms`);
-
+                    const endTime = performance.now();
                     lazyElements.forEach((el) => {
                         const src = el.getAttribute("data-href");
                         el.setAttribute("href", src);
                     });
-
                     this.headerbgParallaxImages.style.opacity = 0.3;
                     this.headerMask();
-
                     setTimeout(() => {
                         this.headerbgParallaxImages.style.opacity = 1;
                     }, 3000);
@@ -206,25 +208,39 @@ class CurveHeader {
     headerImgPose() {
         const ww = window.innerWidth;
         const wh = window.innerHeight;
-        const jzledBBox = this.jzled.getBBox();
-        const jzledWidth = jzledBBox.width;
-        const jzledHeight = jzledBBox.height;
-        const jzledCenterX = jzledBBox.x + jzledWidth / 2;
+
+        const originalJzledWidth = this.imageSourceInfo.jzled[0][0];
+        const originalJzledHeight = this.imageSourceInfo.jzled[0][1];
+        const jzledRatio = originalJzledWidth / originalJzledHeight;
+
+        const maxJzledWidth = Math.min(originalJzledWidth, ww * 0.9);
+        const resizeJzledWidth = maxJzledWidth;
+        const resizeJzledHeight = resizeJzledWidth / jzledRatio;
+
         this.jzled.style.transition = "";
-        this.jzled.setAttribute("x", (ww - jzledWidth) / 2);
-        this.jzled.setAttribute("y", (this.curveHeight - jzledHeight) / 2);
+        this.jzled.setAttribute("width", resizeJzledWidth);
+        this.jzled.setAttribute("height", resizeJzledHeight);
+        this.jzled.setAttribute("x", (ww - resizeJzledWidth) / 2);
+        this.jzled.setAttribute("y", (this.curveHeight - resizeJzledHeight) / 2);
 
         this.dancer.forEach((dance, index) => {
+            const originalDancerWidth = this.imageSourceInfo.dancers[index][0];
+            const originalDancerHeight = this.imageSourceInfo.dancers[index][1];
+            const dancerRatio = originalDancerWidth / originalDancerHeight;
+
+            const maxDancerWidth = Math.min(originalDancerWidth, ww * 0.2);
+            const resizeDancerWidth = maxDancerWidth;
+            const resizeDancerHeight = resizeDancerWidth / dancerRatio;
+
             dance.style.transition = "";
-            const danceBBox = dance.getBBox();
-            const danceWidth = danceBBox.width;
-            const danceHeight = danceBBox.height;
-            const danceCenterX = danceBBox.x + jzledWidth / 2;
-            dance.setAttribute("x", (ww - danceWidth) / 2);
-            dance.setAttribute("y", (this.curveHeight - danceHeight));
+            dance.setAttribute("width", resizeDancerWidth);
+            dance.setAttribute("height", resizeDancerHeight);
+            dance.setAttribute("x", (ww - resizeDancerWidth) / 2);
+            dance.setAttribute("y", this.curveHeight - resizeDancerHeight);
+
             setTimeout(() => {
-                const randomOffsetX = (Math.random() - 0.5) * jzledWidth;
-                const posy = Math.max((this.dancer.length - index) * (-this.curveHeight / 2 / this.dancer.length), -this.curveHeight / 2 + danceHeight);
+                const randomOffsetX = (Math.random() - 0.5) * resizeJzledWidth;
+                const posy = Math.max((this.dancer.length - index) * (-this.curveHeight / 2 / this.dancer.length), -this.curveHeight / 2 + resizeDancerHeight);
                 dance.style.transform = `translate(${randomOffsetX}px, ${posy}px)`;
             }, 100);
         });
@@ -262,19 +278,22 @@ class CurveHeader {
         const imgWidth = 378;
         const imgHeight = 378;
         const girlImg = this.girlImg;
+
         if (!girlImg) return;
+
         const tx = width / 2 - imgWidth / 2;
         const ty = curveHeight - imgHeight;
         girlImg.style.transform = `translate(${tx}px, ${ty}px)`;
     }
 
     navFlow() {
-        const maxSpave = 120;
+        const maxSpace = 120;
         this.menu.style.opacity = 1;
         this.flowEnd = false;
         let space = this.curveLength / this.navs.length;
+
         const animate = () => {
-            if (space > maxSpave) {
+            if (space > maxSpace) {
                 space -= this.navs.length;
                 this.setNavsOnPath(space);
                 requestAnimationFrame(animate);
@@ -287,12 +306,14 @@ class CurveHeader {
                 }, { once: true });
             }
         };
+
         requestAnimationFrame(animate);
     }
 
     logoNavExpand() {
         let animating = false;
         let animated = false;
+
         window.addEventListener('scroll', () => {
             if (window.scrollY > 0) {
                 animated = false;
@@ -304,6 +325,7 @@ class CurveHeader {
                 if (window.scrollY !== 0 || animating || animated) return;
                 animating = true;
                 let space = 0;
+
                 const animate = () => {
                     if (space < 120) {
                         space += 10;
@@ -314,6 +336,7 @@ class CurveHeader {
                         animated = true;
                     }
                 };
+
                 requestAnimationFrame(animate);
             });
         };
@@ -327,6 +350,7 @@ class CurveHeader {
         const maxScale = 1;
         const minScale = 0.8;
         const minWidth = Math.min((Math.max(0, (this.scrollY - this.svgbox.offsetTop)) / 100), 1.1);
+
         if (this.flowEnd) {
             if (Math.max(0, (this.scrollY - this.svgbox.offsetTop)) === 0) {
                 this.navLogo.classList.add("jelly-animate");
@@ -352,15 +376,18 @@ class CurveHeader {
         }
 
         let currentOffset = 0.5 - totalOffset;
+
         navs.forEach((nav, i) => {
             const distanceFromCenter = Math.abs(i - centerIndex);
             const scaleFactor = this.remap(distanceFromCenter, 0, centerIndex, maxScale, minScale);
             const navWidthPercent = navWidthPercents[i];
             const navCenterPercent = (currentOffset + navWidthPercent / 2) * 100;
+
             nav.style.offsetPath = `path("${this.curveData}")`;
             nav.style.offsetDistance = `${navCenterPercent}%`;
             nav.style.zIndex = `${100 - distanceFromCenter}`;
             nav.style.transform = `scale(${scaleFactor})`;
+
             currentOffset += navWidthPercent + gap;
         });
     }
@@ -369,23 +396,30 @@ class CurveHeader {
         this.menu.style.display = "block";
         const defaultTip = this.defaultTip;
         const navTip = this.navTip;
+
         defaultTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
         navTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
+
         this.menu.addEventListener("mouseover", event => {
             const nav = event.target.closest('.nav');
             if (!nav) return;
+
             defaultTip.style.letterSpacing = '-0.57em';
             defaultTip.style.opacity = '0';
+
             const index = Array.from(this.navs).indexOf(nav);
             if (index !== -1 && this.navTips[index]) {
                 navTip.textContent = this.navTips[index];
             }
+
             navTip.style.letterSpacing = '0.1em';
             navTip.style.opacity = '1';
         });
+
         this.menu.addEventListener("mouseout", event => {
             const nav = event.target.closest('.nav');
             if (!nav) return;
+
             defaultTip.style.letterSpacing = '0.1em';
             defaultTip.style.opacity = '1';
             navTip.style.letterSpacing = '10em';
@@ -398,12 +432,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('beforeunload', () => {
         localStorage.setItem('scrollY', window.scrollY);
     });
+
     window.addEventListener('load', () => {
         const savedY = localStorage.getItem('scrollY');
         if (savedY) {
-            // console.log("savedY :", savedY);
-            // window.scrollTo(0, parseInt(savedY));
+            window.scrollTo(0, parseInt(savedY));
         }
     });
+
     window.CurveHeader = new CurveHeader('CurveHeader', true, { svgHeight: 80, isdown: true });
 });

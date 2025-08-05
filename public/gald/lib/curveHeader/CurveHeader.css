@@ -97,7 +97,6 @@
 }
 
 
-
 .svgbox .headerbg .headerBackgroundImg {
     transform: scale(1.5);
     transition: opacity 1s ease-in-out;
@@ -122,7 +121,7 @@
 
 .svgbox .headerfg .curvePath {
     fill: none;
-    stroke: var(--menu-bg);
+    stroke: none;
     stroke-width: calc(var(--header-stroke) * 1);
     stroke-linecap: round;
 }
@@ -142,9 +141,9 @@
 }
 
 .svgbox .menus {
-    position: absolute;
     width: 120px;
     height: 120px;
+    position: absolute;
     top: 0;
     left: 0;
     opacity: 0;
@@ -153,8 +152,8 @@
 
 .svgbox .menus .nav {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    width: 2.5em;
+    height: 2.5em;
     top: 0;
     left: 0;
     display: flex;
@@ -165,21 +164,61 @@
     border: var(--header-stroke) solid var(--menu-bg);
     background-color: var(--menu-bg-darker);
     color: rgba(255, 255, 255, 0.719);
-    font-size: 1.5em;
-    will-change: offset-path, offset-distance;
-    transition: scale 0.5s ease;
+    font-size: 3rem;
     cursor: pointer;
+    transition: scale 0.5s ease, width 0.3s linear, height 0.3s linear;
+    will-change: scale, width, height;
 }
 
+
 .svgbox .menus .nav span {
-    font-size: 1.5em;
+    font-size: 1em;
+    transition: font-size 0.3s linear; 
+    will-change: font-size;
 }
 
 .svgbox .menus .nav .label {
+    font-size: 0.5em;
     width: 100%;
-    letter-spacing: 0.3em;
     text-align: center;
+    transition: font-size 0.3s linear;
+    will-change: font-size;
 }
+
+@media (max-width: 1024px) {
+    .svgbox .menus .nav {
+        width: 100px;
+        height: 100px;
+
+    }
+
+    .svgbox .menus .nav span {
+        font-size: 0.8em;
+    }
+
+    .svgbox .menus .nav .label {
+        font-size: 0.38em;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .svgbox .menus .nav {
+        width: 70px;
+        height: 70px;
+
+    }
+
+    .svgbox .menus .nav span {
+        font-size: 0.5em;
+    }
+
+    .svgbox .menus .nav .label {
+        font-size: 0.3em;
+    }
+}
+
+
 
 .svgbox .menus .nav.logo {
     background-color: var(--menu-bg-darker);

@@ -2,7 +2,7 @@ class PagesManager {
   constructor() {
     this.pages = document.querySelector(".pages");
     this.pageList = this.pages.querySelectorAll(".page");
-    this.pagedown = this.pages.querySelector(".pagedown");
+    this.pageDown = this.pages.querySelector(".pageDown");
     this.navs = document.querySelectorAll(".nav");
     this.pageLogo = document.querySelectorAll(".pageLogo");
 
@@ -39,8 +39,8 @@ class PagesManager {
   }
 
   setPagesHeight() {
-    const pagedownHeight = this.pagedown.offsetHeight;
-    const homePageHeight = pagedownHeight + 250;
+    const pageDownHeight = this.pageDown.offsetHeight;
+    const homePageHeight = pageDownHeight + 250;
     this.pages.style.height = `${homePageHeight}px`;
   }
 
@@ -49,7 +49,7 @@ class PagesManager {
     const allLinks = this.pages.querySelectorAll(".keywordsBtn a");
     allLinks.forEach(link => link.classList.remove("animate-border"));
 
-    const links = this.pagedown.querySelectorAll(".keywordsBtn a");
+    const links = this.pageDown.querySelectorAll(".keywordsBtn a");
     let currentIndex = 0;
     setInterval(() => {
       links.forEach(link => link.classList.remove("animate-border"));
@@ -66,8 +66,8 @@ class PagesManager {
       nav.addEventListener("click", () => {
         const viewboxHeight = window.CurveHeader?.sideHeight - 300;
 
-        this.pageList.forEach(page => page.classList.remove("pagedown"));
-        this.pageList[index].classList.add("pagedown");
+        this.pageList.forEach(page => page.classList.remove("pageDown"));
+        this.pageList[index].classList.add("pageDown");
         this.logoScale();
         this.currentPage = this.pageList[index];
 
@@ -77,7 +77,7 @@ class PagesManager {
         //   easing: t => t * (2 - t)
         // });
 
-        this.pagedown = this.pageList[index];
+        this.pageDown = this.pageList[index];
 
         this.keywordAnimationCycle();
         this.setPagesHeight()
@@ -93,9 +93,9 @@ class PagesManager {
 
 
   logoScale() {
-    const pagedown = this.pages.querySelector(".pagedown");
-    if (!pagedown) return;
-    const logoImg = pagedown.querySelector(".pageLogo img");
+    const pageDown = this.pages.querySelector(".pageDown");
+    if (!pageDown) return;
+    const logoImg = pageDown.querySelector(".pageLogo img");
     if (!logoImg) return;
 
     window.addEventListener("scroll", () => {

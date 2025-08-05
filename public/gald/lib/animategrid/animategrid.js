@@ -1,6 +1,4 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-    
   const grid = document.querySelector(".grid");
   const cards = document.querySelectorAll(".card");
   const imgDots = document.querySelectorAll(".imgDot");
@@ -9,14 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     imgDots.forEach(dot => {
       dot.addEventListener("mouseover", (e) => {
         const dotEl = e.currentTarget;
-        const parent = dotEl.parentElement;      // .imgDots
-        const girdImgs = parent.parentElement;   // .girdImgs
+        const parent = dotEl.parentElement;
+        const girdImgs = parent.parentElement;
         const cardSlider = girdImgs.querySelector(".cardSlider");
-
-        if (!cardSlider) {
-          // console.warn("未找到 .cardSlider");
-          return;
-        }
+        if (!cardSlider) return;
 
         const imgs = cardSlider.querySelectorAll(".cardImg");
         const index = Array.from(parent.children).indexOf(dotEl);
@@ -31,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const parent = dotEl.parentElement;
         const girdImgs = parent.parentElement;
         const cardSlider = girdImgs.querySelector(".cardSlider");
-
         if (!cardSlider) return;
 
         const imgs = cardSlider.querySelectorAll(".cardImg");
@@ -44,36 +37,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
   dotOver();
 
- 
-
   function setPagesHeight() {
     const pages = document.querySelector('.pages');
     const pagedown = document.querySelector('.pagedown');
-    const pagedownHeight = pagedown.offsetHeight;    
+    const pagedownHeight = pagedown?.offsetHeight || 0;
     const homePageHeight = pagedownHeight + 250;
     pages.style.height = `${homePageHeight}px`;
   }
 
   let transitionEnd = true;
 
+  function getComputedGridColumns(gridTemplateColumnsValue) {
+    return gridTemplateColumnsValue.trim().split(/\s+/).length;
+  }
+
+  function updateExpandedCardSpan(card) {
+    const gridStyle = window.getComputedStyle(grid);
+    const columnCount = getComputedGridColumns(gridStyle.getPropertyValue('grid-template-columns'));
+
+    if (columnCount >= 5) {
+      card.style.gridColumn = 'span 3';
+      card.style.gridRow = 'span 2';
+    } else if (columnCount === 4) {
+      card.style.gridColumn = 'span 3';
+      card.style.gridRow = 'span 2';
+    } else if (columnCount === 3 || columnCount === 2) {
+      card.style.gridColumn = 'span 2';
+      card.style.gridRow = 'span 1';
+    } else {
+      card.style.gridColumn = 'span 1';
+      card.style.gridRow = 'span 1';
+    }
+  }
+
   function toggleOpen() {
     if (transitionEnd) {
       this.classList.toggle('card--expanded');
-      window.lenis.resize();
+      if (this.classList.contains('card--expanded')) {
+        // updateExpandedCardSpan(this);
+      } else {
+        // 恢复默认
+        this.style.gridColumn = '';
+        this.style.gridRow = '';
+      }
+      window.lenis?.resize?.();
       setPagesHeight();
-      // 修改子元素样式
-      // const cardInner = this.children[0];
-      // if (cardInner && cardInner.children[1]) {
-      //   cardInner.children[1].style.backgroundColor = "var(--menu-bg-darker)";
-      //   cardInner.children[1].style.color = "rgba(22, 22, 22, 1.0)";
-      // }
       transitionEnd = false;
     }
   }
 
   function toggleActive(event) {
     if (event.propertyName.includes('transform')) {
-      // 这里可以做额外处理，当前为空
+      // 可拓展
     }
   }
 
@@ -82,18 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
     card.addEventListener('transitionend', toggleActive);
   });
 
-  // 使用 animateCSSGrid 包装网格动画
+  // AnimateCSSGrid 效果
   Promise.all([...Array(10).keys()]).then(() => {
     animateCSSGrid.wrapGrid(grid, {
       duration: 250,
       stagger: 10,
-      onStart: elements => {
-        // console.log("动画开始，transitionEnd 状态：" + transitionEnd);
-      },
-      onEnd: elements => {
+      onStart: () => {},
+      onEnd: () => {
         transitionEnd = true;
         setPagesHeight();
-        // console.log("动画结束，transitionEnd 状态：" + transitionEnd);
       }
     });
   });
@@ -106,13 +118,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (expandedCard && transitionEnd && scrollPos < previousScrollPos) {
       expandedCard.classList.remove('card--expanded');
+      expandedCard.style.gridColumn = '';
+      expandedCard.style.gridRow = '';
       transitionEnd = false;
-      // console.log("滚动关闭卡片，transitionEnd 状态：" + transitionEnd);
     }
 
     previousScrollPos = scrollPos;
   });
 
-
+  // Resize 时更新 expanded card 的 span
+  window.addEventListener('resize', () => {
+    const expandedCard = document.querySelector(".card--expanded");
+    if (expandedCard) {
+      updateExpandedCardSpan(expandedCard);
+    }
+  });
 
 });
