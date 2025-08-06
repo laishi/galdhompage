@@ -1,5 +1,6 @@
 class PagesManager {
   constructor() {
+    
     this.pages = document.querySelector(".pages");
     this.pageList = this.pages.querySelectorAll(".page");
     this.pageDown = this.pages.querySelector(".pageDown");
