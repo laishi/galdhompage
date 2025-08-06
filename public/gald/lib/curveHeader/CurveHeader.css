@@ -172,7 +172,7 @@
 
 
 .svgbox .menus .nav span {
-    font-size: 1em;
+    font-size: 0.8em;
     transition: font-size 0.3s linear; 
     will-change: font-size;
 }
@@ -184,7 +184,7 @@
     transition: font-size 0.3s linear;
     will-change: font-size;
 }
-
+/* 
 @media (max-width: 1024px) {
     .svgbox .menus .nav {
         width: 100px;
@@ -193,7 +193,7 @@
     }
 
     .svgbox .menus .nav span {
-        font-size: 0.8em;
+        font-size: 0.7em;
     }
 
     .svgbox .menus .nav .label {
@@ -216,7 +216,7 @@
     .svgbox .menus .nav .label {
         font-size: 0.3em;
     }
-}
+} */
 
 
 

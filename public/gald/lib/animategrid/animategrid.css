@@ -25,7 +25,7 @@
   cursor: pointer;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: black;
+  background-color: black;  
   will-change: transform;
 }
 
@@ -34,9 +34,9 @@
 .card--expanded {
   grid-column: span 3;
   grid-row: span 3;
-  /* border-radius: 10px; */
-  transition: border-radius 0s; /* 确保 border-radius 不会受到过渡效果的影响 */
-  will-change: transform, box-shadow;
+  border-radius: 10px;
+  transition: border-radius 0s;
+  /* will-change: transform, box-shadow; */
 }
 
 
