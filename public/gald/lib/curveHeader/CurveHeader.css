@@ -1,7 +1,7 @@
 :root {
     --hue: 0;
     --saturation: 72%;
-    --lightness: 40%;
+    --lightness: 5%;
     --menu-bg: hsl(var(--hue), var(--saturation), var(--lightness));
     --menu-bg-lighter: hsl(var(--hue), var(--saturation), 50%);
     --menu-bg-darker: hsl(var(--hue), var(--saturation), 20%);
@@ -46,7 +46,6 @@
     width: 80%;
     height: 50px;
     background-color: transparent;
-    opacity: 0;
 }
 
 .svgbox .subTitle h3 {
@@ -114,9 +113,16 @@
     fill: rgba(0, 0, 0, 0.1);
 }
 
-.svgbox .headerfg .headerShape {
+/* .svgbox .headerfg .headerShape {
     fill: var(--menu-bg);
     filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.5));
+} */
+.svgbox .headerfg .headerShape {
+    fill: var(--menu-bg);
+    filter: 
+        drop-shadow(0px 1px 1px rgba(255, 255, 255, 0.8))   /* 边缘亮光 */
+        drop-shadow(0px 3px 6px rgba(255, 255, 255, 0.4))   /* 短距离散光 */
+        drop-shadow(0px 5px 8px rgba(255, 255, 255, 0.2));  /* 更淡更短 */;
 }
 
 .svgbox .headerfg .curvePath {
