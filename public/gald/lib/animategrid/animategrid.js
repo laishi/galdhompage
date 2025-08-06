@@ -39,9 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setPagesHeight() {
     const pages = document.querySelector('.pages');
-    const pagedown = document.querySelector('.pagedown');
-    const pagedownHeight = pagedown?.offsetHeight || 0;
-    const homePageHeight = pagedownHeight + 250;
+    const pageDown = document.querySelector('.pageDown');
+    const pageDownHeight = pageDown.offsetHeight;
+    console.log("pageDownHeight: ", pageDownHeight);
+    const homePageHeight = pageDownHeight + 250;
     pages.style.height = `${homePageHeight}px`;
   }
 

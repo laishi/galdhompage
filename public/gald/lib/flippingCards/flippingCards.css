@@ -9,6 +9,7 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    margin: 2em auto;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     -webkit-box-pack: center;

@@ -45,11 +45,11 @@ class PagesManager {
   }
 
 
-  keywordAnimationCycle() {
+  keywordAnimationCycle(curentPage = this.pageDown) {
     const allLinks = this.pages.querySelectorAll(".keywordsBtn a");
     allLinks.forEach(link => link.classList.remove("animate-border"));
 
-    const links = this.pageDown.querySelectorAll(".keywordsBtn a");
+    const links = curentPage.querySelectorAll(".keywordsBtn a");
     let currentIndex = 0;
     setInterval(() => {
       links.forEach(link => link.classList.remove("animate-border"));
@@ -79,7 +79,7 @@ class PagesManager {
 
         this.pageDown = this.pageList[index];
 
-        this.keywordAnimationCycle();
+        this.keywordAnimationCycle( this.pageList[index]);
         this.setPagesHeight()
         this.navState = {
           index: index,

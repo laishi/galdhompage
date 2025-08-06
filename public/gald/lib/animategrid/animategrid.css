@@ -1,7 +1,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-  grid-auto-rows: 16rem;
+  grid-auto-rows: 15rem;
   gap: 1em;
   grid-auto-flow: dense;
   margin: 0 auto;
@@ -19,6 +19,7 @@
 
 .card {
   position: relative;
+  /* aspect-ratio: 1920/1190; */
   top: 0;
   border-radius: 10px;
   cursor: pointer;
@@ -55,12 +56,15 @@
 }
 
 @media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    grid-auto-rows: 12rem;
+  }
   .card--expanded {
     grid-column: span 1;
     grid-row: span 1;
   }
 }
-
 
 .girdImgs {
   position: relative;
