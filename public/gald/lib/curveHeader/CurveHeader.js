@@ -194,7 +194,7 @@ class CurveHeader {
 changeHue() {
   let hue = 0;
   const root = document.documentElement;
-  const speed = 0.1; // 色相变化速度，每帧增加0.05度（可调）
+  const speed = 0.05; // 色相变化速度，每帧增加0.05度（可调）
 
   const animate = () => {
     hue = (hue + speed) % 360;
