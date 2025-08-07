@@ -154,10 +154,11 @@ class CurveHeader {
 
     headerMask() {
         const maskList = [this.useHeaderbgPathMask];
+        // const opacity = Math.max(0, Math.min(0.95, this.scrollY / 500));
         const opacity = Math.max(0, Math.min(0.95, this.scrollY / 500));
         this.useHeaderbgPathMask.style.opacity = 0.5;
         maskList.forEach(mask => {
-            mask.style.opacity = opacity;
+            mask.style.opacity = 0;
         });
     }
 
@@ -190,14 +191,21 @@ class CurveHeader {
         return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
     }
 
-    changeHue() {
-        let hue = 0;
-        const root = document.documentElement;
-        setInterval(() => {
-            hue = (hue + 30) % 360;
-            root.style.setProperty('--hue', hue);
-        }, 5000);
-    }
+changeHue() {
+  let hue = 0;
+  const root = document.documentElement;
+  const speed = 0.1; // 色相变化速度，每帧增加0.05度（可调）
+
+  const animate = () => {
+    hue = (hue + speed) % 360;
+    root.style.setProperty('--hue', hue);
+    requestAnimationFrame(animate);
+  };
+
+  requestAnimationFrame(animate);
+}
+
+
 
     headerImgPose() {
         const ww = window.innerWidth;
