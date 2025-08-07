@@ -142,6 +142,14 @@ class CurveHeader {
         this.curveData = curveData;
         this.curveLength = this.curvePath.getTotalLength();
 
+
+        if (Math.abs(curveHeight - sideHeight) > 50) {
+            this.subTitle.style.top = `${sideHeight - 50}px`;
+            this.subTitle.style.opacity = 1;
+        } else {
+            this.subTitle.style.opacity = 0;
+        }
+
         this.updateFun(ww, curveHeight, yScroll);
     }
 
@@ -191,19 +199,19 @@ class CurveHeader {
         return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
     }
 
-changeHue() {
-  let hue = 0;
-  const root = document.documentElement;
-  const speed = 0.05; // 色相变化速度，每帧增加0.05度（可调）
+    changeHue() {
+    let hue = 0;
+    const root = document.documentElement;
+    const speed = 0.05; // 色相变化速度，每帧增加0.05度（可调）
 
-  const animate = () => {
-    hue = (hue + speed) % 360;
-    root.style.setProperty('--hue', hue);
+    const animate = () => {
+        hue = (hue + speed) % 360;
+        root.style.setProperty('--hue', hue);
+        requestAnimationFrame(animate);
+    };
+
     requestAnimationFrame(animate);
-  };
-
-  requestAnimationFrame(animate);
-}
+    }
 
 
 
@@ -447,6 +455,7 @@ changeHue() {
     }
 
     navsTip() {
+       
         this.menu.style.display = "block";
         const defaultTip = this.defaultTip;
         const navTip = this.navTip;

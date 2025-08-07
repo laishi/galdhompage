@@ -57,6 +57,7 @@ class PageArrow {
         ];
 
         this.title = document.querySelector(".articleTitle .title");
+        this.navTip = document.querySelector(".navTip");
         this.navLeft = document.querySelector(".navLeft");
         this.navRight = document.querySelector(".navRight");
 
@@ -77,11 +78,27 @@ class PageArrow {
         // 设置当前标题
         this.title.innerText = this.keywords[currentIndex];
         const setHover = (button, nextIndex) => {
+
             if (!button || nextIndex < 0 || nextIndex >= this.galdPages.length) return;
 
             button.addEventListener("click", () => {
                 window.location.href = this.galdPages[nextIndex];
             });
+
+            button.addEventListener("mouseover", () => {
+                const navTips = window.CurveHeader.navTips;
+                const newTips = [this.keywords[currentIndex-1], "首页", this.keywords[currentIndex+1]]
+                window.CurveHeader.navTips = newTips;
+                console.log("this.navTip.textContent: ", navTips);
+            });
+
+
+            button.addEventListener("mouseover", () => {
+                // console.log("this.navTip.textContent: ", this.navTip.textContent);
+            });
+
+
+
         };
 
         setHover(this.navLeft, currentIndex - 1);

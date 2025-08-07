@@ -103,7 +103,6 @@
   line-height: 2em;
 }
 
-
 .pages .page .pageContent {
   position: relative;
   width: 80%;
@@ -129,7 +128,6 @@
   opacity: 0.1;
 }
 
-
 /* === 联系我们内容区 === */
 .pages .pageContent .contactMe {
   position: absolute;
@@ -143,24 +141,17 @@
   /* width: 500px; */
 }
 
-
 /* === 微信二维码 === */
 .wxewm {
   width: 100%;
   max-width: 256px;
 }
 
-
-
-
-
-
 .pages .page .pageFooter {
   position: relative;
   width: 100%;
   height: 0;
 }
-
 
 
 .galdIntri {
@@ -266,6 +257,16 @@
   margin: 2.5em auto;
 }
 
+.keywordsBtn.keywordsLinks {
+  width: 80%;
+}
+
+.keywordsBtn.keywordsLinks a:hover {
+  color: aliceblue;
+  opacity: 1;
+}
+
+
 .keywordsBtn a {
   position: relative;
   width: 100%;
@@ -333,10 +334,9 @@
 .articleTitle {
   width: 100%;
   height: 20vh;
-  background-color: var(--menu-bg-darker);
+  background-color: var(--menu-bg-verydark);
   display: flex;
   justify-content: center;
   align-items: center;
   color: aliceblue;
 }
-
