@@ -17,10 +17,9 @@ const imageUrls = [
 ];
 
 class CurveHeader {
-    constructor(idName, isdown = true, config = { svgHeight: 10, isdown: true }) {
+    constructor(idName, config = { svgHeight: 10, isdown: true }) {
         this.idName = idName;
         this.config = config;
-        this.isdown = isdown;
         this.imageUrls = imageUrls;
         this.navTips = navTips;
         this.imageSourceInfo = {
@@ -119,6 +118,7 @@ class CurveHeader {
         const curveData = `M 0,${sideHeight} Q ${centerLeft},${curveHeight} ${ww / 2},${curveHeight} Q ${centerRight},${curveHeight} ${ww},${sideHeight}`;
         const headData = curveData + ` V 0 H 0 Z`;
         let viewboxHeight = Math.max(curveHeight, sideHeight) + 75;
+        // viewboxHeight = (sideHeight+middleOffset) + 75;
 
         this.viewBoxHeight = viewboxHeight;
         this.titleInfo.style.height = `${curveHeight}px`;
@@ -160,141 +160,27 @@ class CurveHeader {
         this.headerMask();
     }
 
-    headerMask() {
-        const maskList = [this.useHeaderbgPathMask];
-        // const opacity = Math.max(0, Math.min(0.95, this.scrollY / 500));
-        const opacity = Math.max(0, Math.min(0.95, this.scrollY / 500));
-        this.useHeaderbgPathMask.style.opacity = 0.5;
-        maskList.forEach(mask => {
-            mask.style.opacity = 0;
-        });
-    }
 
-    lazyImg() {
-        const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
-        const jzledElement = document.querySelector(".clipImg.jzled");
 
-        if (jzledElement) {
-            const src = jzledElement.getAttribute("data-href");
-            if (src) {
-                const startTime = performance.now();
-                jzledElement.setAttribute("href", src);
-                jzledElement.addEventListener("load", () => {
-                    const endTime = performance.now();
-                    lazyElements.forEach((el) => {
-                        const src = el.getAttribute("data-href");
-                        el.setAttribute("href", src);
-                    });
-                    this.headerbgParallaxImages.style.opacity = 0.3;
-                    this.headerMask();
-                    setTimeout(() => {
-                        this.headerbgParallaxImages.style.opacity = 1;
-                    }, 3000);
-                }, { once: true });
-            }
-        }
-    }
 
     remap(value, inMin, inMax, outMin, outMax) {
         return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
     }
 
     changeHue() {
-    let hue = 0;
-    const root = document.documentElement;
-    const speed = 0.05; // 色相变化速度，每帧增加0.05度（可调）
+        let hue = 0;
+        const root = document.documentElement;
+        const speed = 0.05; // 色相变化速度，每帧增加0.05度（可调）
 
-    const animate = () => {
-        hue = (hue + speed) % 360;
-        root.style.setProperty('--hue', hue);
-        requestAnimationFrame(animate);
-    };
-
-    requestAnimationFrame(animate);
-    }
-
-
-
-    headerImgPose() {
-        const ww = window.innerWidth;
-        const wh = window.innerHeight;
-
-        const originalJzledWidth = this.imageSourceInfo.jzled[0][0];
-        const originalJzledHeight = this.imageSourceInfo.jzled[0][1];
-        const jzledRatio = originalJzledWidth / originalJzledHeight;
-
-        const maxJzledWidth = Math.min(originalJzledWidth, ww * 0.9);
-        const resizeJzledWidth = maxJzledWidth;
-        const resizeJzledHeight = resizeJzledWidth / jzledRatio;
-
-        this.jzled.style.transition = "";
-        this.jzled.setAttribute("width", resizeJzledWidth);
-        this.jzled.setAttribute("height", resizeJzledHeight);
-        this.jzled.setAttribute("x", (ww - resizeJzledWidth) / 2);
-        this.jzled.setAttribute("y", (this.curveHeight - resizeJzledHeight) / 2);
-
-        this.dancer.forEach((dance, index) => {
-            const originalDancerWidth = this.imageSourceInfo.dancers[index][0];
-            const originalDancerHeight = this.imageSourceInfo.dancers[index][1];
-            const dancerRatio = originalDancerWidth / originalDancerHeight;
-
-            const maxDancerWidth = Math.min(originalDancerWidth, ww * 0.2);
-            const resizeDancerWidth = maxDancerWidth;
-            const resizeDancerHeight = resizeDancerWidth / dancerRatio;
-
-            dance.style.transition = "";
-            dance.setAttribute("width", resizeDancerWidth);
-            dance.setAttribute("height", resizeDancerHeight);
-            dance.setAttribute("x", (ww - resizeDancerWidth) / 2);
-            dance.setAttribute("y", this.curveHeight - resizeDancerHeight);
-
-            setTimeout(() => {
-                const randomOffsetX = (Math.random() - 0.5) * resizeJzledWidth;
-                const posy = Math.max((this.dancer.length - index) * (-this.curveHeight / 2 / this.dancer.length), -this.curveHeight / 2 + resizeDancerHeight);
-                dance.style.transform = `translate(${randomOffsetX}px, ${posy}px)`;
-            }, 100);
-        });
-
-        const imageStates = Array.from(this.clipImages).map((ele, index) => {
-            const x = parseFloat(ele.getAttribute("x")) || 0;
-            const y = parseFloat(ele.getAttribute("y")) || 0;
-            return {
-                ele,
-                sourceX: x,
-                sourceY: y,
-                scale: 0.01 * index
-            };
-        });
-
-        if (this.parallaxHandler) {
-            window.removeEventListener("mousemove", this.parallaxHandler);
-        }
-
-        this.parallaxHandler = (e) => {
-            const offsetX = e.clientX - ww / 2;
-            const offsetY = e.clientY - wh / 2;
-            imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
-                const xpos = offsetX * scale;
-                const ypos = offsetY * scale;
-                ele.setAttribute("x", sourceX + xpos);
-                ele.setAttribute("y", sourceY + ypos);
-            });
+        const animate = () => {
+            hue = (hue + speed) % 360;
+            root.style.setProperty('--hue', hue);
+            requestAnimationFrame(animate);
         };
 
-        window.addEventListener("mousemove", this.parallaxHandler);
+        requestAnimationFrame(animate);
     }
 
-    girlCenter(width, curveHeight) {
-        const imgWidth = 378;
-        const imgHeight = 378;
-        const girlImg = this.girlImg;
-
-        if (!girlImg) return;
-
-        const tx = width / 2 - imgWidth / 2;
-        const ty = curveHeight - imgHeight;
-        girlImg.style.transform = `translate(${tx}px, ${ty}px)`;
-    }
 
     navFlow() {
         let fromeSpace = 2;
@@ -309,7 +195,7 @@ class CurveHeader {
                 requestAnimationFrame(animate);
             } else {
                 this.flowEnd = true;
-                this.logoNavExpand();
+                this.navExpand();
                 this.jelly();
             }
         };
@@ -317,7 +203,7 @@ class CurveHeader {
         requestAnimationFrame(animate);
     }
 
-    logoNavExpand() {
+    navExpand() {
         let animating = false;
         let animated = false;
 
@@ -423,6 +309,159 @@ class CurveHeader {
         });
     }
 
+    navsTip() {
+       
+        this.menu.style.display = "block";
+        const defaultTip = this.defaultTip;
+        const navTip = this.navTip;
+
+        defaultTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
+        navTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
+
+        this.menu.addEventListener("mouseover", event => {
+            const nav = event.target.closest('.nav');
+            if (!nav) return;
+
+            defaultTip.style.letterSpacing = '-0.57em';
+            defaultTip.style.opacity = '0';
+
+            const index = Array.from(this.navs).indexOf(nav);
+            if (index !== -1 && this.navTips[index]) {
+                navTip.textContent = this.navTips[index];
+            }
+
+            navTip.style.letterSpacing = '0.1em';
+            navTip.style.opacity = '1';
+        });
+
+        this.menu.addEventListener("mouseout", event => {
+            const nav = event.target.closest('.nav');
+            if (!nav) return;
+
+            defaultTip.style.letterSpacing = '0.1em';
+            defaultTip.style.opacity = '1';
+            navTip.style.letterSpacing = '10em';
+            navTip.style.opacity = '0';
+        });
+    }
+
+
+
+    headerMask() {
+        const maskList = [this.useHeaderbgPathMask];
+        // const opacity = Math.max(0, Math.min(0.95, this.scrollY / 500));
+        const opacity = Math.max(0, Math.min(0.95, this.scrollY / 500));
+        this.useHeaderbgPathMask.style.opacity = 0.5;
+        maskList.forEach(mask => {
+            mask.style.opacity = 0;
+        });
+    }
+
+    lazyImg() {
+        const lazyElements = document.querySelectorAll(".clipImg:not(.jzled)");
+        const jzledElement = document.querySelector(".clipImg.jzled");
+
+        if (jzledElement) {
+            const src = jzledElement.getAttribute("data-href");
+            if (src) {
+                const startTime = performance.now();
+                jzledElement.setAttribute("href", src);
+                jzledElement.addEventListener("load", () => {
+                    const endTime = performance.now();
+                    lazyElements.forEach((el) => {
+                        const src = el.getAttribute("data-href");
+                        el.setAttribute("href", src);
+                    });
+                    this.headerbgParallaxImages.style.opacity = 0.3;
+                    this.headerMask();
+                    setTimeout(() => {
+                        this.headerbgParallaxImages.style.opacity = 1;
+                    }, 3000);
+                }, { once: true });
+            }
+        }
+    }
+
+    girlCenter(width, curveHeight) {
+        const imgWidth = 378;
+        const imgHeight = 378;
+        const girlImg = this.girlImg;
+
+        if (!girlImg) return;
+
+        const tx = width / 2 - imgWidth / 2;
+        const ty = curveHeight - imgHeight;
+        girlImg.style.transform = `translate(${tx}px, ${ty}px)`;
+    }
+
+    headerImgPose() {
+        const ww = window.innerWidth;
+        const wh = window.innerHeight;
+
+        const originalJzledWidth = this.imageSourceInfo.jzled[0][0];
+        const originalJzledHeight = this.imageSourceInfo.jzled[0][1];
+        const jzledRatio = originalJzledWidth / originalJzledHeight;
+
+        const maxJzledWidth = Math.min(originalJzledWidth, ww * 0.9);
+        const resizeJzledWidth = maxJzledWidth;
+        const resizeJzledHeight = resizeJzledWidth / jzledRatio;
+
+        this.jzled.style.transition = "";
+        this.jzled.setAttribute("width", resizeJzledWidth);
+        this.jzled.setAttribute("height", resizeJzledHeight);
+        this.jzled.setAttribute("x", (ww - resizeJzledWidth) / 2);
+        this.jzled.setAttribute("y", (this.curveHeight - resizeJzledHeight) / 2);
+
+        this.dancer.forEach((dance, index) => {
+            const originalDancerWidth = this.imageSourceInfo.dancers[index][0];
+            const originalDancerHeight = this.imageSourceInfo.dancers[index][1];
+            const dancerRatio = originalDancerWidth / originalDancerHeight;
+
+            const maxDancerWidth = Math.min(originalDancerWidth, ww * 0.2);
+            const resizeDancerWidth = maxDancerWidth;
+            const resizeDancerHeight = resizeDancerWidth / dancerRatio;
+
+            dance.style.transition = "";
+            dance.setAttribute("width", resizeDancerWidth);
+            dance.setAttribute("height", resizeDancerHeight);
+            dance.setAttribute("x", (ww - resizeDancerWidth) / 2);
+            dance.setAttribute("y", this.curveHeight - resizeDancerHeight);
+
+            setTimeout(() => {
+                const randomOffsetX = (Math.random() - 0.5) * resizeJzledWidth;
+                const posy = Math.max((this.dancer.length - index) * (-this.curveHeight / 2 / this.dancer.length), -this.curveHeight / 2 + resizeDancerHeight);
+                dance.style.transform = `translate(${randomOffsetX}px, ${posy}px)`;
+            }, 100);
+        });
+
+        const imageStates = Array.from(this.clipImages).map((ele, index) => {
+            const x = parseFloat(ele.getAttribute("x")) || 0;
+            const y = parseFloat(ele.getAttribute("y")) || 0;
+            return {
+                ele,
+                sourceX: x,
+                sourceY: y,
+                scale: 0.01 * index
+            };
+        });
+
+        if (this.parallaxHandler) {
+            window.removeEventListener("mousemove", this.parallaxHandler);
+        }
+
+        this.parallaxHandler = (e) => {
+            const offsetX = e.clientX - ww / 2;
+            const offsetY = e.clientY - wh / 2;
+            imageStates.forEach(({ ele, sourceX, sourceY, scale }) => {
+                const xpos = offsetX * scale;
+                const ypos = offsetY * scale;
+                ele.setAttribute("x", sourceX + xpos);
+                ele.setAttribute("y", sourceY + ypos);
+            });
+        };
+
+        window.addEventListener("mousemove", this.parallaxHandler);
+    }
 
 
     _setNavsOnPath(navSpace = 0) {
@@ -472,41 +511,6 @@ class CurveHeader {
         });
     }
 
-    navsTip() {
-       
-        this.menu.style.display = "block";
-        const defaultTip = this.defaultTip;
-        const navTip = this.navTip;
-
-        defaultTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
-        navTip.style.transition = "letter-spacing 0.3s, opacity 0.3s, transform 0.3s";
-
-        this.menu.addEventListener("mouseover", event => {
-            const nav = event.target.closest('.nav');
-            if (!nav) return;
-
-            defaultTip.style.letterSpacing = '-0.57em';
-            defaultTip.style.opacity = '0';
-
-            const index = Array.from(this.navs).indexOf(nav);
-            if (index !== -1 && this.navTips[index]) {
-                navTip.textContent = this.navTips[index];
-            }
-
-            navTip.style.letterSpacing = '0.1em';
-            navTip.style.opacity = '1';
-        });
-
-        this.menu.addEventListener("mouseout", event => {
-            const nav = event.target.closest('.nav');
-            if (!nav) return;
-
-            defaultTip.style.letterSpacing = '0.1em';
-            defaultTip.style.opacity = '1';
-            navTip.style.letterSpacing = '10em';
-            navTip.style.opacity = '0';
-        });
-    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -521,5 +525,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    window.CurveHeader = new CurveHeader('CurveHeader', true, { svgHeight: 80, isdown: true });
+    window.CurveHeader = new CurveHeader('CurveHeader', { svgHeight: 80, isdown: true });
 });
