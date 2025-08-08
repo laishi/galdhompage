@@ -297,15 +297,15 @@ class CurveHeader {
     }
 
     navFlow() {
-        let fromeSpace = 25;
+        let fromeSpace = 2;
         const targetSpace = 0;
         this.menu.style.opacity = 1;
         this.flowEnd = false;
 
         const animate = () => {
             if (fromeSpace > targetSpace) {
-                fromeSpace -= 0.5;
-                this.navToCurve(fromeSpace);
+                fromeSpace -= 0.1;
+                this.navToCurve(0, fromeSpace);
                 requestAnimationFrame(animate);
             } else {
                 this.flowEnd = true;
@@ -334,9 +334,9 @@ class CurveHeader {
                 let space = 0;
 
                 const animate = () => {
-                    if (space < 7.5) {
-                        space += 0.5;
-                        this.navToCurve(space);
+                    if (space < 1) {
+                        space += 0.1;
+                        this.navToCurve(0, space);
                         requestAnimationFrame(animate);
                     } else {
                         animating = false;
@@ -352,56 +352,74 @@ class CurveHeader {
         setupMouseoverAnimate(this.headerShape);
     }
 
+
     jelly() {
-        this.navLogo.classList.add("jelly-animate");
-        this.navLogo.addEventListener("animationend", () => {
-            this.navLogo.classList.remove("jelly-animate");
-        }, { once: true });
+        const currentScale = parseFloat(this.navLogo.style.transform.replace(/[^0-9.]/g, '')) || 1;
+        const keyframes = [
+            { transform: `scale(${currentScale})` },
+            { transform: `scale(${currentScale * 1.05})` },
+            { transform: `scale(${currentScale * 0.9})` },
+            { transform: `scale(${currentScale * 1.025})` },
+            { transform: `scale(${currentScale})` }
+        ];
+
+        const animationOptions = {
+            duration: 500,
+            easing: 'cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+            fill: 'forwards'
+        };
+
+        this.navLogo.animate(keyframes, animationOptions);
     }
 
-
-    navToCurve(navSpace = 0) {
+    navToCurve(navSpacePx = 0, spaceScale = 1) {
+        const navs = Array.from(this.navs);
         const ww = window.innerWidth;
-        const maxScale = 1;
+        const maxScale = 1.0;
         const minScale = 0.8;
-        const sizeScale = Math.max(0.5, Math.min(1, ww / 2000));
-        const sizeSpace = Math.max(0, 1 - ww / 1000) * 2 + 1;
-        const limitScroll = Math.min(Math.max(0, this.scrollY - this.svgbox.offsetTop) / 10, 7.5);
+        const sizeScale = Math.max(0.5, Math.min(1, ww/2000));
+        const centerIndex = Math.floor((navs.length - 1) / 2);
+        const limitY = Math.min(1.2, this.scrollY / 100);
+        spaceScale = spaceScale === 1 ? limitY : spaceScale;
 
         if (this.flowEnd && Math.max(0, this.scrollY - this.svgbox.offsetTop) === 0) {
             this.jelly();
         }
 
-        const space = navSpace * sizeSpace + limitScroll;
-        const navs = Array.from(this.navs);
-        const centerIndex = Math.floor((navs.length - 1) / 2);
+        let navsWidth = [];
+        let navScaleFactor = [];
+        let navFractors = [];
 
-        // 计算每个导航元素的宽度和缩放因子
-        let scaledWidths = [];
-        let totalUnit = 0;
-
+        // 1. 计算缩放后的每个元素的宽度，以及占整条曲线的比例
         navs.forEach((nav, index) => {
+            const rawWidth = nav.offsetHeight;
             const distanceFromCenter = Math.abs(index - centerIndex);
             const scaleFactor = this.remap(distanceFromCenter, 0, centerIndex, maxScale, minScale) * sizeScale;
-            const widthUnit = scaleFactor;
-            scaledWidths.push({ scaleFactor, widthUnit });
-            totalUnit += widthUnit;
+            navScaleFactor.push(scaleFactor);
+            const scaledWidth = rawWidth * scaleFactor;
+            navsWidth.push(scaledWidth);
+            const fractor = (scaledWidth / this.curveLength * 100) * spaceScale;
+            navFractors.push(fractor);
+            nav.style.transform = `scale(${scaleFactor})`;
+            nav.style.zIndex = navs.length - Math.abs(distanceFromCenter);
         });
 
-        // 计算每个单元的百分比
-        let unitPercent = (space * (navs.length - 1)) / totalUnit;
+        // 2. 计算总宽度占比 + 总间距（像素转换为百分比）+ 起始偏移
+        const totalFractors = navFractors.reduce((a, b) => a + b, 0);
+        const totalSpacePx = navSpacePx * (navs.length - 1);
+        const totalSpacePercent = totalSpacePx / this.curveLength * 100;
+        const startOffset = (100 - totalFractors - totalSpacePercent) / 2 + navFractors[0] / 2;
 
-        // 应用缩放和位置
+        // 3. 设置 offsetDistance，包含像素间距（已转为百分比）
+        let currentOffset = startOffset;
         navs.forEach((nav, index) => {
-            const { scaleFactor } = scaledWidths[index];
-            const distanceFromCenter = index - centerIndex;
-            const offset = distanceFromCenter * space; // 使用固定间距
-            const navCenterPercent = 50 + offset; // 从中间开始
-
-            nav.style.zIndex = navs.length - Math.abs(distanceFromCenter);
-            nav.style.transform = `scale(${scaleFactor})`;
             nav.style.offsetPath = `path("${this.curveData}")`;
-            nav.style.offsetDistance = `${navCenterPercent}%`;
+            nav.style.offsetDistance = `${currentOffset}%`;
+
+            if (index < navs.length - 1) {
+                const spacePercent = navSpacePx / this.curveLength * 100;
+                currentOffset += (navFractors[index] + navFractors[index + 1]) / 2 + spacePercent;
+            }
         });
     }
 
