@@ -67,7 +67,7 @@ class CurveHeader {
         this.pathHeight = 0;
         this.scrollY = 0;
         this.lastSetupTime = 0;
-        this.cooldown = 1000;
+        this.cooldown = 5000;
         this.flowEnd = false;
         this.parallaxHandler = null;
     }
