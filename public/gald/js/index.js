@@ -20,4 +20,17 @@ window.addEventListener("load", () => {
       console.warn("Lenis 未初始化，无法滚动");
     }
   });
+
+
+
+  ScrollReveal().reveal('.card', {
+    origin: 'bottom',
+    distance: '100px',
+    duration: 500,
+    easing: 'ease-in-out',
+    reset: true,
+    interval: 100
+  });
+
+
 });
