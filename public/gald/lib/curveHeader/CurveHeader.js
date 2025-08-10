@@ -58,7 +58,9 @@ class CurveHeader {
         this.useHeaderbgPathMask = document.querySelector(".useHeaderbgPathMask");
 
         this.curveData = "";
+        this.isClose = false;
         this.curveHeight = 0;
+        this.curveOffset = 0;
         this.curveLength = 0;
         this.currentImageIndex = 0;
         this.viewBoxHeight = 500;
@@ -76,6 +78,7 @@ class CurveHeader {
         this.lazyImg();
         this.changeHue();
         this.navFlow();
+        this.navExpand();
         this.navsTip();
         this.handlerEvent();
     }
@@ -97,6 +100,7 @@ class CurveHeader {
         const ww = window.innerWidth;
         const wh = window.innerHeight;
         const curveOffset = Math.max(10, Math.min(25, ww / 100));
+        this.curveOffset = curveOffset;
         const middleOffset = Math.max(50, ww / 10);
         const svgboxOffsetTop = this.svgbox.offsetTop;
         const relativeScroll = Math.max(0, yScroll - svgboxOffsetTop);
@@ -182,131 +186,112 @@ class CurveHeader {
     }
 
 
+
     navFlow() {
-        let fromeSpace = 2;
-        const targetSpace = 0;
-        this.menu.style.opacity = 1;
-        this.flowEnd = false;
-
-        const animate = () => {
-            if (fromeSpace > targetSpace) {
-                fromeSpace -= 0.1;
-                this.navToCurve(0, fromeSpace);
-                requestAnimationFrame(animate);
-            } else {
-                this.flowEnd = true;
-                this.navExpand();
-                this.jelly();
-            }
-        };
-
-        requestAnimationFrame(animate);
+      let fromeSpace = 2;
+      const targetSpace = 0;
+      this.menu.style.opacity = 1;
+      this.flowEnd = false;
+      const animate = () => {
+        if (fromeSpace > targetSpace) {
+          fromeSpace -= 0.1;
+          this.navToCurve(0, fromeSpace);
+          requestAnimationFrame(animate);
+        } else {
+          this.flowEnd = true;
+        //   this.navExpand();
+        }
+      };
+      requestAnimationFrame(animate);
     }
 
     navExpand() {
-        let animating = false;
-        let animated = false;
+    const setupMouseoverAnimate = (element) => {
+        element.addEventListener("mouseover", () => {
+        if (!this.isClose) return; // 如果 isClose 为 false，直接跳过
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 0) {
-                animated = false;
+        let space = 0;
+        const animate = () => {
+            if (space < 1.2 && this.isClose) { // 条件成立才继续
+            space += 0.1;
+            this.navToCurve(0, space);
+            requestAnimationFrame(animate);
+            } else {
+                this.isClose = false;
+                this.navToCurve(0, 1.2);
             }
+        };
+        requestAnimationFrame(animate);
         });
+        
+    };
 
-        const setupMouseoverAnimate = (element) => {
-            element.addEventListener("mouseover", () => {
-                if (window.scrollY !== 0 || animating || animated) return;
-                animating = true;
-                let space = 0;
-
-                const animate = () => {
-                    if (space < 1) {
-                        space += 0.1;
-                        this.navToCurve(0, space);
-                        requestAnimationFrame(animate);
-                    } else {
-                        animating = false;
-                        animated = true;
-                    }
-                };
-
-                requestAnimationFrame(animate);
-            });
-        };
-
-        setupMouseoverAnimate(this.navLogo);
-        setupMouseoverAnimate(this.headerShape);
-    }
-
-
-    jelly() {
-        const currentScale = parseFloat(this.navLogo.style.transform.replace(/[^0-9.]/g, '')) || 1;
-        const keyframes = [
-            { transform: `scale(${currentScale})` },
-            { transform: `scale(${currentScale * 1.05})` },
-            { transform: `scale(${currentScale * 0.9})` },
-            { transform: `scale(${currentScale * 1.025})` },
-            { transform: `scale(${currentScale})` }
-        ];
-
-        const animationOptions = {
-            duration: 500,
-            easing: 'cubic-bezier(0.68, -0.55, 0.27, 1.55)',
-            fill: 'forwards'
-        };
-
-        this.navLogo.animate(keyframes, animationOptions);
+    setupMouseoverAnimate(this.navLogo);
     }
 
     navToCurve(navSpacePx = 0, spaceScale = 1) {
+        console.log("isClose: ", this.isClose);
         const navs = Array.from(this.navs);
-        const ww = window.innerWidth;
-        const maxScale = 1.0;
-        const minScale = 0.8;
-        const sizeScale = Math.max(0.5, Math.min(1, ww/2000));
-        const centerIndex = Math.floor((navs.length - 1) / 2);
-        const limitY = Math.min(1.2, this.scrollY / 100);
-        spaceScale = spaceScale === 1 ? limitY : spaceScale;
+        const navWidthHeight = Math.ceil(this.curveOffset) * 5;
+        navs.forEach(nav => {
+            console.log("nav: ", nav.innerText);
+            nav.style.width = navWidthHeight + 'px';
+            nav.style.height = navWidthHeight + 'px';
+            nav.style.setProperty('--nav-size', navWidthHeight + 'px');
+        });
+        
+        // const navIcons = Array.from(this.navIcon);
+        // navIcons.forEach(icon => {
+        //     icon.style.width = navWidthHeight/3 + 'px';
+        //     icon.style.height = navWidthHeight/3 + 'px';
+        // });
 
-        if (this.flowEnd && Math.max(0, this.scrollY - this.svgbox.offsetTop) === 0) {
-            this.jelly();
+      const ww = window.innerWidth;
+      const maxScale = 1.0;
+      const minScale = 0.8;
+      const sizeScale = Math.max(0.5, Math.min(1, ww / 2500));
+      const centerIndex = Math.floor((navs.length - 1) / 2);
+      const limitY = Math.min(1.2, this.scrollY / 100);
+      spaceScale = spaceScale === 1 ? limitY : spaceScale;
+
+      let navsWidth = [];
+      let navScaleFactor = [];
+      let navFractors = [];
+      navs.forEach((nav, index) => {
+        const distanceFromCenter = Math.abs(index - centerIndex);        
+        const scaleFactor = this.remap(distanceFromCenter, 0, centerIndex, maxScale, minScale) * 1;
+        if (spaceScale <= 0) {
+            this.isClose = true;
+            void this.navLogo.offsetWidth;
+            this.navLogo.classList.add("jelly-animation");
+        }else{
+            // this.isClose = false;
+            this.navLogo.classList.remove("jelly-animation");
         }
+        
+        navScaleFactor.push(scaleFactor);
+        const scaledWidth = navWidthHeight * scaleFactor;
+        navsWidth.push(scaledWidth);
+        const fractor = (scaledWidth / this.curveLength * 100) * spaceScale;
+        navFractors.push(fractor);
+        nav.style.transform = `scale(${scaleFactor})`;
+        nav.style.zIndex = navs.length - Math.abs(distanceFromCenter);
+      });
+      
+      const totalFractors = navFractors.reduce((a, b) => a + b, 0);
+      const totalSpacePx = navSpacePx * (navs.length - 1);
+      const totalSpacePercent = totalSpacePx / this.curveLength * 100;
+      const startOffset = (100 - totalFractors - totalSpacePercent) / 2 + navFractors[0] / 2;
+      let currentOffset = startOffset;
+      navs.forEach((nav, index) => {
+        nav.style.offsetPath = `path("${this.curveData}")`;
+        nav.style.offsetDistance = `${currentOffset}%`;
+        if (index < navs.length - 1) {
+          const spacePercent = navSpacePx / this.curveLength * 100;
+          currentOffset += (navFractors[index] + navFractors[index + 1]) / 2 + spacePercent;
+        }
+      });
 
-        let navsWidth = [];
-        let navScaleFactor = [];
-        let navFractors = [];
-
-        // 1. 计算缩放后的每个元素的宽度，以及占整条曲线的比例
-        navs.forEach((nav, index) => {
-            const rawWidth = nav.offsetHeight;
-            const distanceFromCenter = Math.abs(index - centerIndex);
-            const scaleFactor = this.remap(distanceFromCenter, 0, centerIndex, maxScale, minScale) * sizeScale;
-            navScaleFactor.push(scaleFactor);
-            const scaledWidth = rawWidth * scaleFactor;
-            navsWidth.push(scaledWidth);
-            const fractor = (scaledWidth / this.curveLength * 100) * spaceScale;
-            navFractors.push(fractor);
-            nav.style.transform = `scale(${scaleFactor})`;
-            nav.style.zIndex = navs.length - Math.abs(distanceFromCenter);
-        });
-
-        // 2. 计算总宽度占比 + 总间距（像素转换为百分比）+ 起始偏移
-        const totalFractors = navFractors.reduce((a, b) => a + b, 0);
-        const totalSpacePx = navSpacePx * (navs.length - 1);
-        const totalSpacePercent = totalSpacePx / this.curveLength * 100;
-        const startOffset = (100 - totalFractors - totalSpacePercent) / 2 + navFractors[0] / 2;
-
-        // 3. 设置 offsetDistance，包含像素间距（已转为百分比）
-        let currentOffset = startOffset;
-        navs.forEach((nav, index) => {
-            nav.style.offsetPath = `path("${this.curveData}")`;
-            nav.style.offsetDistance = `${currentOffset}%`;
-
-            if (index < navs.length - 1) {
-                const spacePercent = navSpacePx / this.curveLength * 100;
-                currentOffset += (navFractors[index] + navFractors[index + 1]) / 2 + spacePercent;
-            }
-        });
     }
 
     navsTip() {
