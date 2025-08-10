@@ -23,14 +23,14 @@ window.addEventListener("load", () => {
 
 
 
-  ScrollReveal().reveal('.card', {
-    origin: 'bottom',
-    distance: '100px',
-    duration: 500,
-    easing: 'ease-in-out',
-    reset: true,
-    interval: 100
-  });
+  // ScrollReveal().reveal('.card', {
+  //   origin: 'bottom',
+  //   distance: '100px',
+  //   duration: 500,
+  //   easing: 'ease-in-out',
+  //   reset: true,
+  //   interval: 100
+  // });
 
 
 });
