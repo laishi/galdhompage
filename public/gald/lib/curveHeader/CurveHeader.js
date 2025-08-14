@@ -35,7 +35,7 @@ class CurveHeader {
     initElements() {
         this.svgbox = document.querySelector(`#${this.idName} .svgbox`);
         this.titleInfo = document.querySelector(`#${this.idName} .svgbox .titleInfo`);
-        this.subTitle = document.querySelector(`#${this.idName} .svgbox .subTitle`);
+        this.mainTitle = document.querySelector(`#${this.idName} .svgbox .mainTitle`);
         this.headerbg = document.querySelector(`#${this.idName} .headerbgSvg`);
         this.headerbgPath = document.querySelector(`#${this.idName}-headerbgPath`);
         this.useHeaderbgGradient = document.querySelector(`#${this.idName} .headerbg .useHeaderbgGradient`);
@@ -144,10 +144,10 @@ class CurveHeader {
 
 
         if (Math.abs(curveHeight - sideHeight) > 50) {
-            this.subTitle.style.top = `${sideHeight - 50}px`;
-            this.subTitle.style.opacity = 1;
+            this.mainTitle.style.top = `${sideHeight - 50}px`;
+            this.mainTitle.style.opacity = 1;
         } else {
-            this.subTitle.style.opacity = 0;
+            this.mainTitle.style.opacity = 0;
         }
 
         this.updateFun(ww, curveHeight, yScroll);
