@@ -431,7 +431,7 @@ class CurveHeader {
                 const randomOffsetX = (Math.random() - 0.5) * resizeJzledWidth;
                 const posy = Math.max((this.dancer.length - index) * (-this.curveHeight / 2 / this.dancer.length), -this.curveHeight / 2 + resizeDancerHeight);
                 dance.style.transform = `translate(${randomOffsetX}px, ${posy}px)`;
-            }, 100);
+            }, 1000);
         });
 
         const imageStates = Array.from(this.clipImages).map((ele, index) => {
